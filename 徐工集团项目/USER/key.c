@@ -4,7 +4,7 @@ void Delay(vu32 nCount)
 	for (; nCount != 0; nCount--);
 }
 /*按键管脚初始化*/
-void KeyInit(void)
+void keyInit(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 

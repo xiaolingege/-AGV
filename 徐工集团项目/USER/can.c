@@ -46,7 +46,7 @@ volatile TestStatus TestRx;
 }
 
 /*CAN GPIO 和时钟配置 */
- void CAN_GPIO_Config(void)
+ void canGpioConfig(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure; 
   /* 复用功能和GPIOB端口时钟使能*/	 
@@ -72,7 +72,7 @@ volatile TestStatus TestRx;
 }
 
 /*	CAN初始化 */
- void CAN_INIT(void)
+ void canInit(void)
 {
   CAN_InitTypeDef        CAN_InitStructure;
   CAN_FilterInitTypeDef  CAN_FilterInitStructure;

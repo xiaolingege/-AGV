@@ -3,11 +3,11 @@
 
 
 #include "stm32f10x.h" 
- void CAN_INIT(void);
+ void canInit(void);
  void can_tx(u8 Data1,u8 Data2);
  void can_rx(void);
  void CAN_NVIC_Configuration(void);
-void CAN_GPIO_Config(void);
+void canGpioConfig(void);
 
 #endif /* __CAN_H */
 

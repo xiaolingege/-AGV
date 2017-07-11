@@ -1,7 +1,7 @@
 Dependencies for Project 'STM32-DEMO', Target 'CAN-Loopback-DEMO': (DO NOT MODIFY !)
 F (..\CMSIS\startup\startup_stm32f10x_md.s)(0x59642A29)(--cpu Cortex-M3 -g --apcs=interwork --pd "__MICROLIB SETA 1" -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x --list "..\Listing\startup_stm32f10x_md.lst" --xref -o "..\Output\startup_stm32f10x_md.o" --depend "..\Output\startup_stm32f10x_md.d")
-F (.\main.c)(0x59644748)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\main.o" --omf_browse "..\Output\main.crf" --depend "..\Output\main.d")
-I (key.h)(0x5962E173)
+F (.\main.c)(0x596463F8)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\main.o" --omf_browse "..\Output\main.crf" --depend "..\Output\main.d")
+I (key.h)(0x59645EB8)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
 I (..\CMSIS\core_cm3.h)(0x49D96948)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdint.h)(0x50F96150)
@@ -12,9 +12,9 @@ I (..\FWlib\inc\stm32f10x_gpio.h)(0x4DEC4B41)
 I (..\FWlib\inc\stm32f10x_rcc.h)(0x49D9694A)
 I (..\FWlib\inc\stm32f10x_usart.h)(0x49D9694A)
 I (..\FWlib\inc\misc.h)(0x49D9694A)
-I (led.h)(0x51307DFE)
-I (can.h)(0x510D33FD)
-I (taskCTRL.h)(0x596437C3)
+I (led.h)(0x59645EB8)
+I (can.h)(0x59645EB8)
+I (taskCTRL.h)(0x59646406)
 I (..\FreeRTOS\inc\FreeRTOS.h)(0x573F3A16)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stddef.h)(0x50F96150)
 I (..\FreeRTOS\inc\FreeRTOSConfig.h)(0x5964261A)
@@ -44,7 +44,7 @@ I (..\FWlib\inc\stm32f10x_gpio.h)(0x4DEC4B41)
 I (..\FWlib\inc\stm32f10x_rcc.h)(0x49D9694A)
 I (..\FWlib\inc\stm32f10x_usart.h)(0x49D9694A)
 I (..\FWlib\inc\misc.h)(0x49D9694A)
-I (led.h)(0x51307DFE)
+I (led.h)(0x59645EB8)
 F (.\usart1.c)(0x4E650270)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\usart1.o" --omf_browse "..\Output\usart1.crf" --depend "..\Output\usart1.d")
 I (usart1.h)(0x4E3BEBF1)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
@@ -59,8 +59,8 @@ I (..\FWlib\inc\stm32f10x_usart.h)(0x49D9694A)
 I (..\FWlib\inc\misc.h)(0x49D9694A)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdio.h)(0x50F96150)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdarg.h)(0x50F9614E)
-F (.\can.c)(0x59645266)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\can.o" --omf_browse "..\Output\can.crf" --depend "..\Output\can.d")
-I (can.h)(0x510D33FD)
+F (.\can.c)(0x59645EB8)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\can.o" --omf_browse "..\Output\can.crf" --depend "..\Output\can.d")
+I (can.h)(0x59645EB8)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
 I (..\CMSIS\core_cm3.h)(0x49D96948)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdint.h)(0x50F96150)
@@ -71,10 +71,10 @@ I (..\FWlib\inc\stm32f10x_gpio.h)(0x4DEC4B41)
 I (..\FWlib\inc\stm32f10x_rcc.h)(0x49D9694A)
 I (..\FWlib\inc\stm32f10x_usart.h)(0x49D9694A)
 I (..\FWlib\inc\misc.h)(0x49D9694A)
-I (led.h)(0x51307DFE)
+I (led.h)(0x59645EB8)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdio.h)(0x50F96150)
-F (.\led.c)(0x51307EB2)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\led.o" --omf_browse "..\Output\led.crf" --depend "..\Output\led.d")
-I (led.h)(0x51307DFE)
+F (.\led.c)(0x59645EB8)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\led.o" --omf_browse "..\Output\led.crf" --depend "..\Output\led.d")
+I (led.h)(0x59645EB8)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
 I (..\CMSIS\core_cm3.h)(0x49D96948)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdint.h)(0x50F96150)
@@ -85,8 +85,8 @@ I (..\FWlib\inc\stm32f10x_gpio.h)(0x4DEC4B41)
 I (..\FWlib\inc\stm32f10x_rcc.h)(0x49D9694A)
 I (..\FWlib\inc\stm32f10x_usart.h)(0x49D9694A)
 I (..\FWlib\inc\misc.h)(0x49D9694A)
-F (.\key.c)(0x596306B5)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\key.o" --omf_browse "..\Output\key.crf" --depend "..\Output\key.d")
-I (key.h)(0x5962E173)
+F (.\key.c)(0x59645EB8)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\key.o" --omf_browse "..\Output\key.crf" --depend "..\Output\key.d")
+I (key.h)(0x59645EB8)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
 I (..\CMSIS\core_cm3.h)(0x49D96948)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdint.h)(0x50F96150)
@@ -97,8 +97,8 @@ I (..\FWlib\inc\stm32f10x_gpio.h)(0x4DEC4B41)
 I (..\FWlib\inc\stm32f10x_rcc.h)(0x49D9694A)
 I (..\FWlib\inc\stm32f10x_usart.h)(0x49D9694A)
 I (..\FWlib\inc\misc.h)(0x49D9694A)
-I (led.h)(0x51307DFE)
-I (can.h)(0x510D33FD)
+I (led.h)(0x59645EB8)
+I (can.h)(0x59645EB8)
 F (.\SPI.c)(0x596312D7)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\spi.o" --omf_browse "..\Output\spi.crf" --depend "..\Output\spi.d")
 I (SPI.h)(0x5962F0D6)
 I (..\FWlib\inc\stm32f10x_spi.h)(0x49D9694A)

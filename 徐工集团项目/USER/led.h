@@ -22,6 +22,6 @@
 
 
 
-void LED_GPIO_Config(void);
+void ledGpioConfig(void);
 
 #endif /* __LED_H */

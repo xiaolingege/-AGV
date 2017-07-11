@@ -4,7 +4,7 @@
 #include "stm32f10x_gpio.h"
 #include "led.h"
 #include "can.h"
-void KeyInit(void);
+void keyInit(void);
 
 void GetKey(void);
 #endif // !_KEY_H
