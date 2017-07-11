@@ -1,0 +1,13 @@
+..\Output\nvicconfig.o: NVICconfig.c
+..\Output\nvicconfig.o: NVICconfig.h
+..\Output\nvicconfig.o: ..\CMSIS\stm32f10x.h
+..\Output\nvicconfig.o: ..\CMSIS\core_cm3.h
+..\Output\nvicconfig.o: D:\Keil4.70\ARM\ARMCC\bin\..\include\stdint.h
+..\Output\nvicconfig.o: ..\CMSIS\system_stm32f10x.h
+..\Output\nvicconfig.o: ..\USER\stm32f10x_conf.h
+..\Output\nvicconfig.o: ..\FWlib\inc\stm32f10x_can.h
+..\Output\nvicconfig.o: ..\CMSIS\stm32f10x.h
+..\Output\nvicconfig.o: ..\FWlib\inc\stm32f10x_gpio.h
+..\Output\nvicconfig.o: ..\FWlib\inc\stm32f10x_rcc.h
+..\Output\nvicconfig.o: ..\FWlib\inc\stm32f10x_usart.h
+..\Output\nvicconfig.o: ..\FWlib\inc\misc.h

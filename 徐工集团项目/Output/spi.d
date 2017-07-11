@@ -1,0 +1,14 @@
+..\Output\spi.o: SPI.c
+..\Output\spi.o: SPI.h
+..\Output\spi.o: ..\FWlib\inc\stm32f10x_spi.h
+..\Output\spi.o: ..\CMSIS\stm32f10x.h
+..\Output\spi.o: ..\CMSIS\core_cm3.h
+..\Output\spi.o: D:\Keil4.70\ARM\ARMCC\bin\..\include\stdint.h
+..\Output\spi.o: ..\CMSIS\system_stm32f10x.h
+..\Output\spi.o: ..\USER\stm32f10x_conf.h
+..\Output\spi.o: ..\FWlib\inc\stm32f10x_can.h
+..\Output\spi.o: ..\CMSIS\stm32f10x.h
+..\Output\spi.o: ..\FWlib\inc\stm32f10x_gpio.h
+..\Output\spi.o: ..\FWlib\inc\stm32f10x_rcc.h
+..\Output\spi.o: ..\FWlib\inc\stm32f10x_usart.h
+..\Output\spi.o: ..\FWlib\inc\misc.h
