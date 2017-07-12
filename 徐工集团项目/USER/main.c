@@ -6,8 +6,13 @@
 #include "usart.h"
 #include "NVICconfig.h"
 #include "ttllcd.h"
+#include "charger.h" 
+
+xQueueHandle CanMsgQueue;
+
 void initShowStrings(void);
 void lcdShowElectricity(float e);
+
 int main(void)
 {
 	SystemInit();
@@ -18,6 +23,7 @@ int main(void)
 	usartConfig();
 	spiInit();
 	nvicConfig();
+	CanMsgQueue = xQueueCreate(1, sizeof(u32));
 	xTaskCreate((TaskFunction_t)usartLcdTask,\
 		(const char*)"UsartLcdTask",\
 		(u16)_USART_LCD_STK,\
@@ -78,28 +84,30 @@ void canChargeTask(void *pvParameter)
 	pvParameter = (void *)pvParameter;
 	while (1)
 	{
-		canMsgTx(10, 20);
-		vTaskDelay(200);
+
+	//	canMsgTx(10, 20);
+		changerCTRLLoop();
+		vTaskDelay(20);
 	}
 }
 
 void initShowStrings(void)
 {
-	lcdShowString(X1_Y1, "哈工大机器人集团");
-	lcdShowString(X2_Y2, "电量：");  					lcdShowString(X2_Y8, "%");
-	lcdShowString(X3_Y2, "电压：");						lcdShowString(X3_Y8, "V");
-	lcdShowString(X4_Y2, "电流：");						lcdShowString(X4_Y8, "A");
+	lcdShowString(X1_Y1,(u8 *)"哈工大机器人集团");
+	lcdShowString(X2_Y2,(u8 *)"电量：");  					lcdShowString(X2_Y8,(u8 *) "%");
+	lcdShowString(X3_Y2,(u8 *)"电压：");						lcdShowString(X3_Y8,(u8 *)"V");
+	lcdShowString(X4_Y2,(u8 *)"电流：");						lcdShowString(X4_Y8,(u8 *) "A");
 }
 void lcdShowElectricity(float e)
 {
 	lcdShowNumber(X4_Y5, e);
 	if(e > 0)
 	{
-		lcdShowString(X4_Y5, "+");	
+		lcdShowString(X4_Y5, (u8 *)"+");	
 	}
 	else
 	{
-		lcdShowString(X4_Y5, "-");	
+		lcdShowString(X4_Y5, (u8 *) "-");	
 	}
 
 }

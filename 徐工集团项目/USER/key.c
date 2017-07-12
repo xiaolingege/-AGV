@@ -30,7 +30,7 @@ void  GetKey(void)
 		if (Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_13))
 		{
 			while (Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_13)) { ; }//等待按键释放                        
-			canMsgTx(0X55, 0X77);
+			canMsgTx(0X55, 0X77, 0x01, 0x02);
 			LED1(1); LED2(1);
 		}
 	}
@@ -41,11 +41,9 @@ void  GetKey(void)
 		if (Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_12))
 		{
 			while (Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_12)) { ; }//等待按键释放                        
-			canMsgTx(0X99, 0Xbb);
+			canMsgTx(0X99, 0Xbb, 0x01, 0x02);
 			LED1(1); LED2(1);
 		}
 	}
-
-
 }
 

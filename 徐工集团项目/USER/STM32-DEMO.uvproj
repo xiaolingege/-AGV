@@ -456,6 +456,11 @@
               <FileType>1</FileType>
               <FilePath>.\ttllcd.c</FilePath>
             </File>
+            <File>
+              <FileName>charger.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\charger.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

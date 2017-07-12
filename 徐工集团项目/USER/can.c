@@ -54,38 +54,17 @@ void canInit(void)
 	CAN_ITConfig(CAN1, CAN_IT_FMP0, ENABLE); //使能FIFO0消息挂号中断
 }
 /* 发送两个字节的数据*/
-void canMsgTx(u8 Data1, u8 Data2)
+void canMsgTx(u8 Data1, u8 Data2, u8 Data3, u8 Data4)
 {
 	CanTxMsg TxMessage;
-	TxMessage.StdId = 0x00;	//标准标识符为0x00
-	TxMessage.ExtId = 0x0000; //扩展标识符0x0000
-	TxMessage.IDE = CAN_ID_EXT;//使用标准标识符
+	TxMessage.StdId = 0x181f02f5  ;	//标准标识符为0x00
+	TxMessage.IDE = CAN_ID_STD;//使用标准标识符
 	TxMessage.RTR = CAN_RTR_DATA;//为数据帧
-	TxMessage.DLC = 2;	//	消息的数据长度为2个字节
+	TxMessage.DLC = 4;	//	消息的数据长度为2个字节
 	TxMessage.Data[0] = Data1; //第一个字节数据
 	TxMessage.Data[1] = Data2; //第二个字节数据 
+	TxMessage.Data[2] = Data3; //第三个字节数据
+	TxMessage.Data[3] = Data4; //第四个字节数据
 	CAN_Transmit(CAN1, &TxMessage); //发送数据
 }
-/* USB中断和CAN接收中断服务程序，USB跟CAN公用I/O，这里只用到CAN的中断。 */
-void USB_LP_CAN1_RX0_IRQHandler(void)
-{
-	CanRxMsg RxMessage;
-	RxMessage.StdId = 0x00;
-	RxMessage.ExtId = 0x00;
-	RxMessage.IDE = 0;
-	RxMessage.DLC = 0;
-	RxMessage.FMI = 0;
-	RxMessage.Data[0] = 0x00;
-	RxMessage.Data[1] = 0x00;
-	CAN_Receive(CAN1, CAN_FIFO0, &RxMessage); //接收FIFO0中的数据  
-	if ((RxMessage.Data[0] == 0x99) && (RxMessage.Data[1] == 0xbb))
-	{
-		LED1(0); LED2(1);
-	}
-	if ((RxMessage.Data[0] == 0x55) && (RxMessage.Data[1] == 0x77))
-	{
-		LED1(1); LED2(0);
-	}
-}
-
 

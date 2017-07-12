@@ -32,3 +32,4 @@
 ..\Output\main.o: usart.h
 ..\Output\main.o: NVICconfig.h
 ..\Output\main.o: ttllcd.h
+..\Output\main.o: charger.h

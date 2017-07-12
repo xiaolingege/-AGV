@@ -5,8 +5,8 @@
 #include "timers.h"
 #include "queue.h"
 
-#define _USART_LCD_PRIO 1
-#define _USART_IRDA_PRIO 1
+#define _USART_LCD_PRIO 2
+#define _USART_IRDA_PRIO 2
 #define _CAN_CHARGE_PRIO 1
 #define _TTL_LCD_PRIO 2
 
