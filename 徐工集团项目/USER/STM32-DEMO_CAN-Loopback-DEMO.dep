@@ -1,6 +1,6 @@
 Dependencies for Project 'STM32-DEMO', Target 'CAN-Loopback-DEMO': (DO NOT MODIFY !)
 F (..\CMSIS\startup\startup_stm32f10x_md.s)(0x59642A29)(--cpu Cortex-M3 -g --apcs=interwork --pd "__MICROLIB SETA 1" -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x --list "..\Listing\startup_stm32f10x_md.lst" --xref -o "..\Output\startup_stm32f10x_md.o" --depend "..\Output\startup_stm32f10x_md.d")
-F (.\main.c)(0x5965D47E)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\main.o" --omf_browse "..\Output\main.crf" --depend "..\Output\main.d")
+F (.\main.c)(0x5965E162)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\main.o" --omf_browse "..\Output\main.crf" --depend "..\Output\main.d")
 I (key.h)(0x59645EB8)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
 I (..\CMSIS\core_cm3.h)(0x49D96948)
@@ -14,7 +14,7 @@ I (..\FWlib\inc\stm32f10x_usart.h)(0x49D9694A)
 I (..\FWlib\inc\misc.h)(0x49D9694A)
 I (led.h)(0x59645EB8)
 I (can.h)(0x5965C1B5)
-I (taskCTRL.h)(0x5965D0DD)
+I (taskCTRL.h)(0x5965D8C0)
 I (..\FreeRTOS\inc\FreeRTOS.h)(0x573F3A16)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stddef.h)(0x50F96150)
 I (..\FreeRTOS\inc\FreeRTOSConfig.h)(0x5964261A)
@@ -33,7 +33,7 @@ I (lcd.h)(0x5964317B)
 I (usart.h)(0x59643B7F)
 I (NVICconfig.h)(0x59634570)
 I (ttllcd.h)(0x59648D9B)
-I (charger.h)(0x5965B8FB)
+I (charger.h)(0x5965E1CA)
 F (.\stm32f10x_it.c)(0x5962F2DB)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\stm32f10x_it.o" --omf_browse "..\Output\stm32f10x_it.crf" --depend "..\Output\stm32f10x_it.d")
 I (stm32f10x_it.h)(0x49D96964)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
@@ -193,8 +193,8 @@ I (..\FreeRTOS\inc\queue.h)(0x573F3A16)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdio.h)(0x50F96150)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdlib.h)(0x50F96150)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\string.h)(0x50F96150)
-F (.\charger.c)(0x5965D47E)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\charger.o" --omf_browse "..\Output\charger.crf" --depend "..\Output\charger.d")
-I (charger.h)(0x5965B8FB)
+F (.\charger.c)(0x5965EA0C)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\charger.o" --omf_browse "..\Output\charger.crf" --depend "..\Output\charger.d")
+I (charger.h)(0x5965E1CA)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
 I (..\CMSIS\core_cm3.h)(0x49D96948)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdint.h)(0x50F96150)
@@ -335,19 +335,6 @@ I (..\FreeRTOS\inc\mpu_wrappers.h)(0x573F3A16)
 I (..\FreeRTOS\inc\task.h)(0x573F3A16)
 I (..\FreeRTOS\inc\list.h)(0x573F3A16)
 I (..\FreeRTOS\inc\croutine.h)(0x573F3A16)
-F (..\FreeRTOS\src\heap_2.c)(0x573F3A16)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\heap_2.o" --omf_browse "..\Output\heap_2.crf" --depend "..\Output\heap_2.d")
-I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdlib.h)(0x50F96150)
-I (..\FreeRTOS\inc\FreeRTOS.h)(0x573F3A16)
-I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stddef.h)(0x50F96150)
-I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdint.h)(0x50F96150)
-I (..\FreeRTOS\inc\FreeRTOSConfig.h)(0x5964261A)
-I (..\FreeRTOS\inc\projdefs.h)(0x573F3A16)
-I (..\FreeRTOS\inc\portable.h)(0x573F3A16)
-I (..\FreeRTOS\inc\deprecated_definitions.h)(0x573F3A16)
-I (..\FreeRTOS\inc\portmacro.h)(0x573F3A17)
-I (..\FreeRTOS\inc\mpu_wrappers.h)(0x573F3A16)
-I (..\FreeRTOS\inc\task.h)(0x573F3A16)
-I (..\FreeRTOS\inc\list.h)(0x573F3A16)
 F (..\FreeRTOS\src\list.c)(0x573F3A16)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\list.o" --omf_browse "..\Output\list.crf" --depend "..\Output\list.d")
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdlib.h)(0x50F96150)
 I (..\FreeRTOS\inc\FreeRTOS.h)(0x573F3A16)
@@ -418,3 +405,16 @@ I (..\FreeRTOS\inc\task.h)(0x573F3A16)
 I (..\FreeRTOS\inc\list.h)(0x573F3A16)
 I (..\FreeRTOS\inc\queue.h)(0x573F3A16)
 I (..\FreeRTOS\inc\timers.h)(0x573F3A16)
+F (..\FreeRTOS\src\heap_4.c)(0x573F3A16)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\heap_4.o" --omf_browse "..\Output\heap_4.crf" --depend "..\Output\heap_4.d")
+I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdlib.h)(0x50F96150)
+I (..\FreeRTOS\inc\FreeRTOS.h)(0x573F3A16)
+I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stddef.h)(0x50F96150)
+I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdint.h)(0x50F96150)
+I (..\FreeRTOS\inc\FreeRTOSConfig.h)(0x5964261A)
+I (..\FreeRTOS\inc\projdefs.h)(0x573F3A16)
+I (..\FreeRTOS\inc\portable.h)(0x573F3A16)
+I (..\FreeRTOS\inc\deprecated_definitions.h)(0x573F3A16)
+I (..\FreeRTOS\inc\portmacro.h)(0x573F3A17)
+I (..\FreeRTOS\inc\mpu_wrappers.h)(0x573F3A16)
+I (..\FreeRTOS\inc\task.h)(0x573F3A16)
+I (..\FreeRTOS\inc\list.h)(0x573F3A16)

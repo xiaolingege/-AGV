@@ -13,6 +13,13 @@ xQueueHandle CanMsgQueue;
 void initShowStrings(void);
 void lcdShowElectricity(float e);
 
+//************************************
+// FunctionName:  main
+// Returns:   int
+// Qualifier:主函数，本工程为徐工集团AGV辅助设备控制程序，主要包括2种LCD的驱动、485通信，CAN通信，
+//485与红外透传模块连接，进行无线通信,CAN与充电板连接，完成对充电板的开关控制、参数配置等功能
+// Parameter: void
+//************************************
 int main(void)
 {
 	SystemInit();
@@ -45,6 +52,12 @@ int main(void)
 	vTaskStartScheduler();
 }
 
+//************************************
+// FullName:  usartLcdTask
+// Returns:   void
+// Qualifier:LCD驱动任务，完成LCD的驱动与现实
+// Parameter: void * pvParameter
+//************************************
 void usartLcdTask(void * pvParameter)
 {
 	float i = 10.2;
@@ -69,6 +82,12 @@ void usartLcdTask(void * pvParameter)
 	}
 }
 
+//************************************
+// FullName:  usartIrdaTask
+// Returns:   void
+// Qualifier:完成通过RS485红外透传通信
+// Parameter: void * pvParameter
+//************************************
 void usartIrdaTask(void * pvParameter)
 {
 	pvParameter = (void *)pvParameter;
@@ -79,18 +98,28 @@ void usartIrdaTask(void * pvParameter)
 	}
 }
 
+//************************************
+// FullName:  canChargeTask
+// Returns:   void
+// Qualifier:通过can通信控制充电板任务
+// Parameter: void * pvParameter
+//************************************
 void canChargeTask(void *pvParameter)
 {
 	pvParameter = (void *)pvParameter;
 	while (1)
 	{
-
-	//	canMsgTx(10, 20);
 		changerCTRLLoop();
 		vTaskDelay(20);
 	}
 }
 
+//************************************
+// FullName:  initShowStrings
+// Returns:   void
+// Qualifier:12864开机显示基本信息（lables）
+// Parameter: void
+//************************************
 void initShowStrings(void)
 {
 	lcdShowString(X1_Y1,(u8 *)"哈工大机器人集团");
@@ -98,6 +127,12 @@ void initShowStrings(void)
 	lcdShowString(X3_Y2,(u8 *)"电压：");						lcdShowString(X3_Y8,(u8 *)"V");
 	lcdShowString(X4_Y2,(u8 *)"电流：");						lcdShowString(X4_Y8,(u8 *) "A");
 }
+//************************************
+// FullName:  lcdShowElectricity
+// Returns:   void
+// Qualifier:电流显示增加电流方向，用来判断充电、放电（用在AGV上时正为放电，负为充电状态）
+// Parameter: float e
+//************************************
 void lcdShowElectricity(float e)
 {
 	lcdShowNumber(X4_Y5, e);

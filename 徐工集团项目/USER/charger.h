@@ -8,7 +8,7 @@
 #include "timers.h"
 #include "queue.h"
 
-typedef enum{CLOSE = 0, OPEN = 1 } _CHANGER_STATUS;
+typedef enum {CLOSE = 0, OPEN = 1 } _CHANGER_STATUS;
 
 static void setCloseDelay(void);
 extern u8 changerCTRLLoop(void);

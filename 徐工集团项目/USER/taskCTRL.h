@@ -12,7 +12,7 @@
 
 #define _USART_LCD_STK 100
 #define _USART_IRDA_STK 100
-#define _CAN_CHARGE_STK 100
+#define _CAN_CHARGE_STK 300
 #define _TTL_LCD_STK 50
 
 TaskHandle_t UsartLcdTaskHandle;

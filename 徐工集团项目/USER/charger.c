@@ -4,8 +4,13 @@ extern xQueueHandle CanMsgQueue;
 static u32 CloseDelay = 0;
 static _CHANGER_STATUS ChangerStatus = CLOSE;
 
-
 /*主要控制循环*/
+//************************************
+// FullName:  changerCTRLLoop
+// Returns:   extern u8
+// Qualifier:完成充电机控制主要流程
+// Parameter: void
+//************************************
 extern u8 changerCTRLLoop(void)
 {
 	if (isCloseDelay())
@@ -46,22 +51,40 @@ extern u8 changerCTRLLoop(void)
 			closeChanger();//充电完成关闭
 			return 0x08;
 		}
-
 	}
 	return 0x09; //正常充电中
 }
 
+//************************************
+// FullName:  setCloseDelay
+// Returns:   void
+// Qualifier:设置延时，延时时间为3s
+// Parameter: void
+//************************************
 static void setCloseDelay(void)
 {
 	CloseDelay = 150000;
 }
 
 
+//************************************
+// FullName:  isOnConnect
+// Returns:   bool
+// Qualifier:判断是否已经与AGV对接成功
+// Parameter: void
+//************************************
 static bool isOnConnect(void)
 {
-	return FALSE;
+
+	return TRUE;
 }
 
+//************************************
+// FullName:  isCloseDelay
+// Returns:   bool
+// Qualifier:判断是否正在关机延时
+// Parameter: void
+//************************************
 static bool isCloseDelay(void)
 {
 	if (0 == CloseDelay)
@@ -73,16 +96,21 @@ static bool isCloseDelay(void)
 		CloseDelay--;
 		return TRUE;
 	}
-
 }
 
 /*充电板查询正常*/
+//************************************
+// FullName:  isChangerNotGood
+// Returns:   bool
+// Qualifier:有效充电板
+// Parameter: void
+//************************************
 static bool isChangerNotGood(void)
 {
-	u32 RxMsg = 0;
-	canMsgTx(0x01, 0x02, 0x03, 0x04);
 	//发送查询命令
 	//回馈命令等待并验证
+	u32 RxMsg = 0;
+	canMsgTx(0x01, 0x02, 0x03, 0x04);
 	xQueueReceive(CanMsgQueue, &RxMsg, 10);
 	if (RxMsg == 0x01)
 	{
@@ -94,27 +122,111 @@ static bool isChangerNotGood(void)
 	}
 }
 
+//************************************
+// FullName:  openChanger
+// Returns:   void
+// Qualifier:打开充电机，等待反馈命令
+// Parameter: void
+//************************************
 static void openChanger(void)
 {
+	u32 RxMsg = 0;
+	canMsgTx(0xf1, 0x02, 0x04, 0x87);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != 0xf1020487)
+	{
+		return;
+	}
+	canMsgTx(0xf1, 0x12, 0x00, 0x00);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != 0xf1120000)
+	{
+		return;
+	}
 	ChangerStatus = OPEN;
 }
+
+//************************************
+// FunctionName:  closeChanger
+// Returns:   void
+// Qualifier:关闭充电机，设置延时
+// Parameter: void
+//************************************
 static void closeChanger(void)
 {
+	u32 RxMsg = 0;
+	canMsgTx(0xf1, 0x02, 0x04, 0x87);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != 0xf1020487)
+	{
+		return;
+	}
+	canMsgTx(0xf1, 0x12, 0x00, 0x01);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != 0xf1120001)
+	{
+		return;
+	}
 	setCloseDelay();
 	ChangerStatus = CLOSE;
 }
 static void setChanger(void)
 {
-  //发送配置命令并等待反馈
+	//发送配置命令并等待反馈
+	u32 RxMsg = 0;
+	canMsgTx(0xf1, 0x02, 0x04, 0x21);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != 0xf1020421)
+	{
+		return;
+	}
+	canMsgTx(0xf1, 0x12, 0x0e, 0xb3);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != 0xf1120eb3)
+	{
+		return;
+	}
+	canMsgTx(0xf1, 0x02, 0x04, 0x23);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != 0xf1020423)
+	{
+		return;
+	}
+	canMsgTx(0xf1, 0x12, 0x0a, 0x00);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != 0xf1120a00)
+	{
+		return;
+	}
+
 }
 
 static bool isBattryVolGood(void)
 {
-	return FALSE;
+	u32 RxMsg = 0;
+	canMsgTx(0xf1, 0x02, 0x04, 0x31);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != 0xf1020431)
+	{
+		return FALSE;
+	}
+	canMsgTx(0xf1, 0x12, 0x04, 0x31);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+
+	return TRUE;
 }
 
 static bool isCurGood(void)
 {
+	u32 RxMsg = 0;
+	canMsgTx(0xf1, 0x02, 0x04, 0x30);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != 0xf1020430)
+	{
+		return FALSE;
+	}
+	canMsgTx(0xf1, 0x12, 0x04, 0x30);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
 	return TRUE;
 }
 
