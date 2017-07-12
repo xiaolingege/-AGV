@@ -14,6 +14,7 @@ SET CPU_CLOCK=0x007A1200
 "D:\Keil4.70\ARM\ARMCC\bin\ArmCC" --Via "..\output\lcd.__i"
 "D:\Keil4.70\ARM\ARMCC\bin\ArmCC" --Via "..\output\usart.__i"
 "D:\Keil4.70\ARM\ARMCC\bin\ArmCC" --Via "..\output\nvicconfig.__i"
+"D:\Keil4.70\ARM\ARMCC\bin\ArmCC" --Via "..\output\ttllcd.__i"
 "D:\Keil4.70\ARM\ARMCC\bin\ArmCC" --Via "..\output\stm32f10x_gpio.__i"
 "D:\Keil4.70\ARM\ARMCC\bin\ArmCC" --Via "..\output\stm32f10x_rcc.__i"
 "D:\Keil4.70\ARM\ARMCC\bin\ArmCC" --Via "..\output\stm32f10x_usart.__i"

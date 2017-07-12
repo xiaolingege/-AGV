@@ -71,7 +71,6 @@ void USART2_IRQHandler(void)
 		// 	if(!(USART_GetITStatus(USART2,USART_IT_RXNE))); 
 	{
 		USART_ClearITPendingBit(USART2, USART_IT_RXNE);
-
 	}
 }
 void USART3_IRQHandler(void)
@@ -80,7 +79,6 @@ void USART3_IRQHandler(void)
 		// 	if(!(USART_GetITStatus(USART2,USART_IT_RXNE))); 
 	{
 		USART_ClearITPendingBit(USART3, USART_IT_RXNE);
-
 	}
 }
 

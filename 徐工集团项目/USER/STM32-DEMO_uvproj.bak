@@ -392,9 +392,9 @@
           <GroupName>startup</GroupName>
           <Files>
             <File>
-              <FileName>startup_stm32f10x_hd.s</FileName>
+              <FileName>startup_stm32f10x_md.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\CMSIS\startup\startup_stm32f10x_hd.s</FilePath>
+              <FilePath>..\CMSIS\startup\startup_stm32f10x_md.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -450,6 +450,11 @@
               <FileName>NVICconfig.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\NVICconfig.c</FilePath>
+            </File>
+            <File>
+              <FileName>ttllcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ttllcd.c</FilePath>
             </File>
           </Files>
         </Group>

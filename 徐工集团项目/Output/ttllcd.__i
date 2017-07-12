@@ -2,4 +2,4 @@
 -I D:\Keil4.70\ARM\RV31\INC 
 -I D:\Keil4.70\ARM\CMSIS\Include 
 -I D:\Keil4.70\ARM\Inc\ST\STM32F10x 
--DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\can.o" --omf_browse "..\Output\can.crf" --depend "..\Output\can.d" "can.c"
+-DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\ttllcd.o" --omf_browse "..\Output\ttllcd.crf" --depend "..\Output\ttllcd.d" "ttllcd.c"

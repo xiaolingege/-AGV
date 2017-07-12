@@ -2,4 +2,4 @@
 -I D:\Keil4.70\ARM\RV31\INC 
 -I D:\Keil4.70\ARM\CMSIS\Include 
 -I D:\Keil4.70\ARM\Inc\ST\STM32F10x 
--DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -o "..\Output\timers.o" --omf_browse "..\Output\timers.crf" --depend "..\Output\timers.d" "..\FreeRTOS\src\timers.c"
+-DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\timers.o" --omf_browse "..\Output\timers.crf" --depend "..\Output\timers.d" "..\FreeRTOS\src\timers.c"

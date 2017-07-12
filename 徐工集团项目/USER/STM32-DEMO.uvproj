@@ -348,7 +348,7 @@
             <uSurpInc>0</uSurpInc>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER, STM32F10X_HD</Define>
+              <Define>USE_STDPERIPH_DRIVER, STM32F10X_MD</Define>
               <Undefine></Undefine>
               <IncludePath>..\CMSIS;..\FWlib\inc;..\USER;..\FreeRTOS\inc</IncludePath>
             </VariousControls>
@@ -450,6 +450,11 @@
               <FileName>NVICconfig.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\NVICconfig.c</FilePath>
+            </File>
+            <File>
+              <FileName>ttllcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ttllcd.c</FilePath>
             </File>
           </Files>
         </Group>

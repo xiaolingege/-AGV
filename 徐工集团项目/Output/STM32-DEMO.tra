@@ -12,6 +12,7 @@
 ### List of Objects: adding '"..\output\lcd.o"'
 ### List of Objects: adding '"..\output\usart.o"'
 ### List of Objects: adding '"..\output\nvicconfig.o"'
+### List of Objects: adding '"..\output\ttllcd.o"'
 ### List of Objects: adding '"..\output\stm32f10x_gpio.o"'
 ### List of Objects: adding '"..\output\stm32f10x_rcc.o"'
 ### List of Objects: adding '"..\output\stm32f10x_usart.o"'
@@ -30,14 +31,14 @@
 ### List of Objects: adding '"..\output\tasks.o"'
 ### List of Objects: adding '"..\output\timers.o"'
 ### ADS-LD Command completed:
---cpu Cortex-M3 "..\output\startup_stm32f10x_md.o" "..\output\main.o" "..\output\stm32f10x_it.o" "..\output\usart1.o" "..\output\can.o" "..\output\led.o" "..\output\key.o" "..\output\spi.o" "..\output\lcd.o" "..\output\usart.o" "..\output\nvicconfig.o" "..\output\stm32f10x_gpio.o" "..\output\stm32f10x_rcc.o" "..\output\stm32f10x_usart.o" "..\output\stm32f10x_can.o" "..\output\misc.o" "..\output\stm32f10x_dma.o" "..\output\stm32f10x_exti.o" "..\output\stm32f10x_spi.o" "..\output\core_cm3.o" "..\output\system_stm32f10x.o" "..\output\croutine.o" "..\output\heap_2.o" "..\output\list.o" "..\output\port.o" "..\output\queue.o" "..\output\tasks.o" "..\output\timers.o" 
+--cpu Cortex-M3 "..\output\startup_stm32f10x_md.o" "..\output\main.o" "..\output\stm32f10x_it.o" "..\output\usart1.o" "..\output\can.o" "..\output\led.o" "..\output\key.o" "..\output\spi.o" "..\output\lcd.o" "..\output\usart.o" "..\output\nvicconfig.o" "..\output\ttllcd.o" "..\output\stm32f10x_gpio.o" "..\output\stm32f10x_rcc.o" "..\output\stm32f10x_usart.o" "..\output\stm32f10x_can.o" "..\output\misc.o" "..\output\stm32f10x_dma.o" "..\output\stm32f10x_exti.o" "..\output\stm32f10x_spi.o" "..\output\core_cm3.o" "..\output\system_stm32f10x.o" "..\output\croutine.o" "..\output\heap_2.o" "..\output\list.o" "..\output\port.o" "..\output\queue.o" "..\output\tasks.o" "..\output\timers.o" 
 --library_type=microlib --ro-base 0x08000000 --entry 0x08000000 --rw-base 0x20000000 --entry Reset_Handler --first __Vectors --strict --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
 --info sizes --info totals --info unused --info veneers 
  --list "..\Listing\STM32-DEMO.map" -o ..\Output\STM32-DEMO.axf### Preparing Environment (PrepEnvAds)
 ### ADS-LD Output File: '..\Output\STM32-DEMO.axf'
 ### ADS-LD Command File: '..\Output\STM32-DEMO.lnp'
 ### Checking for dirty Components...
-### Creating CmdFile '..\Output\STM32-DEMO.lnp', Handle=0x00000B50
+### Creating CmdFile '..\Output\STM32-DEMO.lnp', Handle=0x000008CC
 ### Writing '.lnp' file
 ### ADS-LD Command file '..\Output\STM32-DEMO.lnp' is ready.
 ### ADS-LD: About to start ADS-LD Thread.

@@ -24,15 +24,13 @@ void keyInit(void)
 /*检测是否有按键按下*/
 void  GetKey(void)
 {
-
-
 	if (Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_13))
 	{
 		Delay(1000000);//去抖动//去抖动
 		if (Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_13))
 		{
 			while (Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_13)) { ; }//等待按键释放                        
-			can_tx(0X55, 0X77);
+			canMsgTx(0X55, 0X77);
 			LED1(1); LED2(1);
 		}
 	}
@@ -43,7 +41,7 @@ void  GetKey(void)
 		if (Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_12))
 		{
 			while (Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_12)) { ; }//等待按键释放                        
-			can_tx(0X99, 0Xbb);
+			canMsgTx(0X99, 0Xbb);
 			LED1(1); LED2(1);
 		}
 	}

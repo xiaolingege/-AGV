@@ -31,3 +31,4 @@
 ..\Output\main.o: lcd.h
 ..\Output\main.o: usart.h
 ..\Output\main.o: NVICconfig.h
+..\Output\main.o: ttllcd.h
