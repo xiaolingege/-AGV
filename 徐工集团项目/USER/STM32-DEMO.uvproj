@@ -532,11 +532,6 @@
               <FilePath>..\FreeRTOS\src\croutine.c</FilePath>
             </File>
             <File>
-              <FileName>heap_2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\FreeRTOS\src\heap_2.c</FilePath>
-            </File>
-            <File>
               <FileName>list.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\FreeRTOS\src\list.c</FilePath>
@@ -560,6 +555,11 @@
               <FileName>timers.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\FreeRTOS\src\timers.c</FilePath>
+            </File>
+            <File>
+              <FileName>heap_4.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FreeRTOS\src\heap_4.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,6 +1,6 @@
 Dependencies for Project 'STM32-DEMO', Target 'CAN-Loopback-DEMO': (DO NOT MODIFY !)
 F (..\CMSIS\startup\startup_stm32f10x_md.s)(0x59642A29)(--cpu Cortex-M3 -g --apcs=interwork --pd "__MICROLIB SETA 1" -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x --list "..\Listing\startup_stm32f10x_md.lst" --xref -o "..\Output\startup_stm32f10x_md.o" --depend "..\Output\startup_stm32f10x_md.d")
-F (.\main.c)(0x5965E162)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\main.o" --omf_browse "..\Output\main.crf" --depend "..\Output\main.d")
+F (.\main.c)(0x5965EF1F)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\main.o" --omf_browse "..\Output\main.crf" --depend "..\Output\main.d")
 I (key.h)(0x59645EB8)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
 I (..\CMSIS\core_cm3.h)(0x49D96948)
@@ -30,10 +30,10 @@ I (..\FreeRTOS\inc\queue.h)(0x573F3A16)
 I (SPI.h)(0x5962F0D6)
 I (..\FWlib\inc\stm32f10x_spi.h)(0x49D9694A)
 I (lcd.h)(0x5964317B)
-I (usart.h)(0x59643B7F)
+I (usart.h)(0x5965EDB1)
 I (NVICconfig.h)(0x59634570)
 I (ttllcd.h)(0x59648D9B)
-I (charger.h)(0x5965E1CA)
+I (charger.h)(0x5967124D)
 F (.\stm32f10x_it.c)(0x5962F2DB)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\stm32f10x_it.o" --omf_browse "..\Output\stm32f10x_it.crf" --depend "..\Output\stm32f10x_it.d")
 I (stm32f10x_it.h)(0x49D96964)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
@@ -61,7 +61,7 @@ I (..\FWlib\inc\stm32f10x_usart.h)(0x49D9694A)
 I (..\FWlib\inc\misc.h)(0x49D9694A)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdio.h)(0x50F96150)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdarg.h)(0x50F9614E)
-F (.\can.c)(0x5965C3AD)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\can.o" --omf_browse "..\Output\can.crf" --depend "..\Output\can.d")
+F (.\can.c)(0x5966DE43)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\can.o" --omf_browse "..\Output\can.crf" --depend "..\Output\can.d")
 I (can.h)(0x5965C1B5)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
 I (..\CMSIS\core_cm3.h)(0x49D96948)
@@ -142,7 +142,7 @@ I (..\FreeRTOS\inc\queue.h)(0x573F3A16)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdio.h)(0x50F96150)
 I (SPI.h)(0x5962F0D6)
 F (.\usart.c)(0x596465F3)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\usart.o" --omf_browse "..\Output\usart.crf" --depend "..\Output\usart.d")
-I (usart.h)(0x59643B7F)
+I (usart.h)(0x5965EDB1)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
 I (..\CMSIS\core_cm3.h)(0x49D96948)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdint.h)(0x50F96150)
@@ -167,7 +167,7 @@ I (..\FWlib\inc\stm32f10x_usart.h)(0x49D9694A)
 I (..\FWlib\inc\misc.h)(0x49D9694A)
 F (.\ttllcd.c)(0x59649500)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\ttllcd.o" --omf_browse "..\Output\ttllcd.crf" --depend "..\Output\ttllcd.d")
 I (ttllcd.h)(0x59648D9B)
-I (usart.h)(0x59643B7F)
+I (usart.h)(0x5965EDB1)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
 I (..\CMSIS\core_cm3.h)(0x49D96948)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdint.h)(0x50F96150)
@@ -193,8 +193,8 @@ I (..\FreeRTOS\inc\queue.h)(0x573F3A16)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdio.h)(0x50F96150)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdlib.h)(0x50F96150)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\string.h)(0x50F96150)
-F (.\charger.c)(0x5965EA0C)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\charger.o" --omf_browse "..\Output\charger.crf" --depend "..\Output\charger.d")
-I (charger.h)(0x5965E1CA)
+F (.\charger.c)(0x5967147E)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\charger.o" --omf_browse "..\Output\charger.crf" --depend "..\Output\charger.d")
+I (charger.h)(0x5967124D)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)
 I (..\CMSIS\core_cm3.h)(0x49D96948)
 I (D:\Keil4.70\ARM\ARMCC\bin\..\include\stdint.h)(0x50F96150)
@@ -218,6 +218,7 @@ I (..\FreeRTOS\inc\task.h)(0x573F3A16)
 I (..\FreeRTOS\inc\list.h)(0x573F3A16)
 I (..\FreeRTOS\inc\timers.h)(0x573F3A16)
 I (..\FreeRTOS\inc\queue.h)(0x573F3A16)
+I (led.h)(0x59645EB8)
 F (..\FWlib\src\stm32f10x_gpio.c)(0x49D9694A)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -I D:\Keil4.70\ARM\RV31\INC -I D:\Keil4.70\ARM\CMSIS\Include -I D:\Keil4.70\ARM\Inc\ST\STM32F10x -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\stm32f10x_gpio.o" --omf_browse "..\Output\stm32f10x_gpio.crf" --depend "..\Output\stm32f10x_gpio.d")
 I (..\FWlib\inc\stm32f10x_gpio.h)(0x4DEC4B41)
 I (..\CMSIS\stm32f10x.h)(0x4DECC1EB)

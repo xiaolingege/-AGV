@@ -24,3 +24,4 @@
 ..\Output\charger.o: ..\FreeRTOS\inc\list.h
 ..\Output\charger.o: ..\FreeRTOS\inc\timers.h
 ..\Output\charger.o: ..\FreeRTOS\inc\queue.h
+..\Output\charger.o: led.h

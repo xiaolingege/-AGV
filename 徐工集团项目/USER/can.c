@@ -37,9 +37,9 @@ void canInit(void)
 	CAN_InitStructure.CAN_SJW = CAN_SJW_1tq; //重新同步跳跃宽度1个时间单位
 	CAN_InitStructure.CAN_BS1 = CAN_BS1_3tq; //时间段1为3个时间单位
 	CAN_InitStructure.CAN_BS2 = CAN_BS2_2tq; //时间段2为2个时间单位
-	CAN_InitStructure.CAN_Prescaler = 12;  //时间单位长度为12	
+	CAN_InitStructure.CAN_Prescaler = 24;  //时间单位长度为12	
 	CAN_Init(CAN1, &CAN_InitStructure);
-	//波特率为：72M/2/12(1+3+2)=0.5 即500K
+	//波特率为：72M/2/24(1+3+2)=0.25 即250K
 /* CAN filter init */
 	CAN_FilterInitStructure.CAN_FilterNumber = 1;//指定过滤器为1
 	CAN_FilterInitStructure.CAN_FilterMode = CAN_FilterMode_IdMask;//指定过滤器为标识符屏蔽位模式

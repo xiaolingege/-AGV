@@ -7,6 +7,7 @@
 #include "NVICconfig.h"
 #include "ttllcd.h"
 #include "charger.h" 
+#include "led.h"
 
 xQueueHandle CanMsgQueue;
 
@@ -93,8 +94,10 @@ void usartIrdaTask(void * pvParameter)
 	pvParameter = (void *)pvParameter;
 	while (1)
 	{
-		usart485Send((u8 *)"hello\r\n", 7);
-		vTaskDelay(200);
+		LED1(0);
+		usart485Send((u8 *)"Helloworld\r\n", 12);
+		LED1(1);
+		vTaskDelay(1000);
 	}
 }
 
