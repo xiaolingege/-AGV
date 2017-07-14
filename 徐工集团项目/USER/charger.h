@@ -8,8 +8,8 @@
 #include "timers.h"
 #include "queue.h"
 
-typedef enum {CLOSE = 0, OPEN = 1 } _CHANGER_STATUS;
-typedef enum {module0 = 0, module1 = 1, module2 = 2, no_module = 3} _CHANGER_MODULE;
+typedef enum { CLOSE = 0, OPEN = 1 } _CHARGER_STATUS;
+typedef enum { module0 = 0, module1 = 1, module2 = 2, no_module = 3 } _CHANGER_MODULE;
 //配置充电电压参数命令
 #define _SET_VOLATE_CMD 0xf1, 0x02, 0x04, 0x21
 #define _SET_VOLATE_CMD_BACK 0xf1020421ul
@@ -52,27 +52,22 @@ typedef enum {module0 = 0, module1 = 1, module2 = 2, no_module = 3} _CHANGER_MOD
 
 #define _CONNECT_CMD 0xf1, 0x01, 0x04, 0x30
 
-static void setCloseDelay(void);
-extern u8 changerCTRLLoop(void);
+//static void setCloseDelay(void);
+extern u8 chargerCTRLLoop(void);
 static bool isOnConnect(void);
 static bool isCloseDelay(void);
-static bool isChangerNotGood(void);
+bool isChargerNotGood(void);
 static bool isChargeOver(void);
 
-static void openChanger(void);
-static void closeChanger(void);
-static void setChanger(void);
+static void openCharger(void);
+static void closeCharger(void);
+static void setCharger(void);
 static bool isBattryVolGood(void);
 static bool isCurGood(void);
 static bool isOverCharge(void);
-
-
 static bool isEmmergency(void);
-static _CHANGER_STATUS checkChangerStatusOpen(void);
-
-
-
+static _CHARGER_STATUS checkChangerStatusOpen(void);
 static void setChangerOver(void);
-static void clrChangerOver(void);
+//static void clrChargerOver(void);
 static void setChangerMoudle(_CHANGER_MODULE mode);
 #endif // !_CHANGER_H

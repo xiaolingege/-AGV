@@ -1,10 +1,19 @@
 #include "charger.h"
 #include "led.h"
+#include "key.h"
+
+#define _MSG_RCV_DELAY 100
+#define setCloseDelay()\
+		 CloseDelay = 200
+#define clrChargerOver()\
+		ChargerOverFlag = FALSE
+
 extern xQueueHandle CanMsgQueue;
 static u32 CloseDelay = 0;
-static _CHANGER_STATUS ChangerStatus = CLOSE;
-
-static bool ChangerOverFlag = FALSE;
+static _CHARGER_STATUS ChargerStatus = CLOSE;
+static bool ChargerOverFlag = FALSE;
+static u16 rcvCanCount = 0;
+static bool ChargerGoodStatus = FALSE;
 
 /*主要控制循环*/
 //************************************
@@ -13,21 +22,25 @@ static bool ChangerOverFlag = FALSE;
 // Qualifier:完成充电机控制主要流程
 // Parameter: void
 //************************************
-extern u8 changerCTRLLoop(void)
+extern u8 chargerCTRLLoop(void)
 {
-	if (isCloseDelay())
+ if (isCloseDelay())
 	{
 		return 0x01;//正在延时关闭
 	}
-	else if(isEmmergency())
+	else if (isEmmergency())
 	{
+		if (checkChangerStatusOpen() == OPEN)
+		{
+			closeCharger();
+		}
 		return 0x02;//按下急停
 	}
 	else if (!isOnConnect())
 	{
 		return 0x03;//无车体连接
 	}
-	else if (isChangerNotGood())
+	else if (isChargerNotGood())
 	{
 		return 0x04;//充电板异常(连接检测)
 	}
@@ -35,37 +48,26 @@ extern u8 changerCTRLLoop(void)
 	{
 		return 0x05;//电池电压异常
 	}
-	else 
+	else
 	{
 		if (CLOSE == checkChangerStatusOpen())//充电板未打开，打开充电板
 		{
-			setChanger();
-			openChanger();
+			setCharger();
+			openCharger();
 			return 0x06;//正在打开充电桩
 		}
 		else if (!isCurGood())//充电板已经打开，查询参数
 		{
-			closeChanger();
+			closeCharger();
 			return 0x07;//电流异常关闭
 		}
 		else if (isOverCharge())
 		{
-			closeChanger();//充电完成关闭
+			closeCharger();//充电完成关闭
 			return 0x08;
 		}
 	}
 	return 0x09; //正常充电中
-}
-
-//************************************
-// FullName:  setCloseDelay
-// Returns:   void
-// Qualifier:设置延时，延时时间为3s
-// Parameter: void
-//************************************
-static void setCloseDelay(void)
-{
-	CloseDelay = 150000;
 }
 
 //************************************
@@ -88,13 +90,18 @@ static bool isOnConnect(void)
 //************************************
 static bool isCloseDelay(void)
 {
-	if (0 == CloseDelay)
+	if(ChargerStatus == OPEN)
+	{
+		return FALSE;
+	}
+	else if (0 == CloseDelay)
 	{
 		return FALSE;
 	}
 	else
 	{
 		CloseDelay--;
+		vTaskDelay(500);
 		return TRUE;
 	}
 }
@@ -106,21 +113,27 @@ static bool isCloseDelay(void)
 // Qualifier:有效充电板
 // Parameter: void
 //************************************
-static bool isChangerNotGood(void)
+ bool isChargerNotGood(void)
 {
 	//发送查询命令
 	//回馈命令等待并验证
 	u8 i = 0;
 	u32 RxMsg = 0;
-	canMsgTx(_CONNECT_CMD);
-	for ( i = 0; i < 16; i++)
+	if (ChargerGoodStatus == TRUE)
 	{
-		if (pdFALSE == xQueueReceive(CanMsgQueue, &RxMsg, 50))
+		return FALSE;
+	}
+	canMsgTx(_CONNECT_CMD);
+	for (i = 0; i < 16; i++)
+	{
+		if (pdFALSE == xQueueReceive(CanMsgQueue, &RxMsg, 100))
 		{
-
+			ChargerGoodStatus = FALSE;
 			return TRUE;
 		}
 	}
+	rcvCanCount = 0;
+	ChargerGoodStatus = TRUE;
 	return FALSE;
 }
 
@@ -130,7 +143,7 @@ static bool isChangerNotGood(void)
 // Qualifier:打开充电机，等待反馈命令
 // Parameter: void
 //************************************
-static void openChanger(void)
+static void openCharger(void)
 {
 	u32 RxMsg = 0;
 	canMsgTx(_OPEN_CMD);
@@ -145,8 +158,8 @@ static void openChanger(void)
 	{
 		return;
 	}
-	clrChangerOver();
-	ChangerStatus = OPEN;
+	clrChargerOver();
+	ChargerStatus = OPEN;
 }
 
 //************************************
@@ -155,7 +168,7 @@ static void openChanger(void)
 // Qualifier:关闭充电机，设置延时
 // Parameter: void
 //************************************
-static void closeChanger(void)
+static void closeCharger(void)
 {
 	u32 RxMsg = 0;
 	canMsgTx(_CLOSE_CMD);
@@ -171,7 +184,8 @@ static void closeChanger(void)
 		return;
 	}
 	setCloseDelay();
-	ChangerStatus = CLOSE;
+	ChargerStatus = CLOSE;
+	ChargerGoodStatus = FALSE;
 }
 //************************************
 // FunctionName:  setChanger
@@ -179,7 +193,7 @@ static void closeChanger(void)
 // Qualifier:发送命令配置当前充电板参数
 // Parameter: void
 //************************************
-static void setChanger(void)
+static void setCharger(void)
 {
 	//发送配置命令并等待反馈
 	u32 RxMsg = 0;
@@ -220,11 +234,9 @@ static bool isBattryVolGood(void)
 {
 	u32 RxMsg = 0;
 	canMsgTx(_CHECK_BATTRY_CMD);
-	LED2(0);
 	xQueueReceive(CanMsgQueue, &RxMsg, 80);
 	if (RxMsg != _CHECK_BATTRY_CMD_BACK)
 	{
-		LED2(1);
 		return FALSE;
 	}
 	canMsgTx(_CHECK_BATTY_DATA);
@@ -257,7 +269,7 @@ static bool isCurGood(void)
 	}
 	else
 	{
-		if (RxMsg < 0xf13100ff)//设定小于某值时，充电结束，充电开始时设定充电未结束
+		if (RxMsg < 0xf1310100)//设定小于某值时，充电结束，充电开始时设定充电未结束
 		{
 			setChangerOver();
 		}
@@ -273,7 +285,7 @@ static bool isCurGood(void)
 //************************************
 static bool isOverCharge(void)
 {
-	return ChangerOverFlag;
+	return ChargerOverFlag;
 }
 
 //************************************
@@ -284,6 +296,14 @@ static bool isOverCharge(void)
 //************************************
 static bool isEmmergency(void)
 {
+	if (Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_13))
+	{
+		vTaskDelay(5);
+		if (Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_13))
+		{
+			return TRUE;
+		}
+	}
 	return FALSE;
 }
 
@@ -293,9 +313,9 @@ static bool isEmmergency(void)
 // Qualifier:查询当前充电机状态
 // Parameter: void
 //************************************
-static _CHANGER_STATUS checkChangerStatusOpen(void)
+static _CHARGER_STATUS checkChangerStatusOpen(void)
 {
-	return ChangerStatus;
+	return ChargerStatus;
 }
 
 /* USB中断和CAN接收中断服务程序，USB跟CAN公用I/O，这里只用到CAN的中断。 */
@@ -315,34 +335,22 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
 	RxMessage.Data[2] = 0x00;
 	RxMessage.Data[3] = 0x00;
 	CAN_Receive(CAN1, CAN_FIFO0, &RxMessage); //接收FIFO0中的数据  
-	RxData = RxMessage.Data[0] << 24 | RxMessage.Data[1] << 16 | RxMessage.Data[2] << 8 | RxMessage.Data[0];
-	if (RxMessage.StdId == 0x181ff502)
+	RxData = RxMessage.Data[0] << 24 | RxMessage.Data[1] << 16 | RxMessage.Data[2] << 8 | RxMessage.Data[3];
+	if (RxMessage.ExtId == 0x181ff502)
 	{
-		xQueueSendFromISR(CanMsgQueue,&RxData, &xHigherPriorityTaskWoken);
+		rcvCanCount ++;
+		xQueueSendFromISR(CanMsgQueue, &RxData, &xHigherPriorityTaskWoken);
 	}
 }
 
 //************************************
 // FunctionName:  setChangerOver
 // Returns:   void
-// Qualifier:调用该函数设定充电结束，此时充电电流较小
+// Qualifier:调用该函数设定充电结束标志，此时充电电流较小
 // Parameter: void
 //************************************
 static void setChangerOver(void)
 {
-	ChangerOverFlag = TRUE;
+	ChargerOverFlag = TRUE;
 }
-
-//************************************
-// FunctionName:  clrChangerOver
-// Returns:   void
-// Qualifier:开始充电，如果上次充电正常结束，本次充电刷新标志位，显示为未充电结束
-// Parameter: void
-//************************************
-static void clrChangerOver(void)
-{
-	ChangerOverFlag = FALSE;
-}
-
-
 

@@ -8,9 +8,10 @@
 #include "ttllcd.h"
 #include "charger.h" 
 #include "led.h"
+#include "stdio.h"
 
 xQueueHandle CanMsgQueue;
-
+u8 ChargerStatusBack;
 void initShowStrings(void);
 void lcdShowElectricity(float e);
 
@@ -31,7 +32,7 @@ int main(void)
 	usartConfig();
 	spiInit();
 	nvicConfig();
-	CanMsgQueue = xQueueCreate(1, sizeof(u32));
+	CanMsgQueue = xQueueCreate(16, sizeof(u32));
 	xTaskCreate((TaskFunction_t)usartLcdTask,\
 		(const char*)"UsartLcdTask",\
 		(u16)_USART_LCD_STK,\
@@ -61,17 +62,20 @@ int main(void)
 //************************************
 void usartLcdTask(void * pvParameter)
 {
+	u8 showbyte = 0;
 	float i = 10.2;
-	vTaskDelay(2000);
-	_TTL_LCD_CLR;
-	lcdInit();
-	vTaskDelay(500);
-	_TTL_LCD_SHOW;
-	vTaskDelay(2000);
+ 	vTaskDelay(200);
+// 	_TTL_LCD_CLR;
+ 	lcdInit();
+// 	vTaskDelay(500);
+// 	_TTL_LCD_SHOW;
+// 	vTaskDelay(2000);
 	initShowStrings();
 	while (1)
 	{
-		lcdShowNumber(X2_Y5, i);
+		sprintf((u8 *)&showbyte, "%x", ChargerStatusBack);
+		lcdShowString(X2_Y6, &showbyte);
+		//lcdShowNumber(X2_Y5, i);
 		lcdShowNumber(X3_Y5, i);
 		lcdShowElectricity(i);
 		ttlLcdMsgSed(CHARGEVOL, 10);
@@ -94,9 +98,9 @@ void usartIrdaTask(void * pvParameter)
 	pvParameter = (void *)pvParameter;
 	while (1)
 	{
-		LED1(0);
+		LED2(0);
 		usart485Send((u8 *)"Helloworld\r\n", 12);
-		LED1(1);
+		LED2(1);
 		vTaskDelay(1000);
 	}
 }
@@ -109,11 +113,15 @@ void usartIrdaTask(void * pvParameter)
 //************************************
 void canChargeTask(void *pvParameter)
 {
+	u8 led1Flag = 0;
 	pvParameter = (void *)pvParameter;
 	while (1)
 	{
-		changerCTRLLoop();
-		vTaskDelay(20);
+		led1Flag ^= 1;
+		LED1(led1Flag);
+			ChargerStatusBack = chargerCTRLLoop();
+
+		vTaskDelay(500);
 	}
 }
 
@@ -126,7 +134,7 @@ void canChargeTask(void *pvParameter)
 void initShowStrings(void)
 {
 	lcdShowString(X1_Y1,(u8 *)"哈工大机器人集团");
-	lcdShowString(X2_Y2,(u8 *)"电量：");  					lcdShowString(X2_Y8,(u8 *) "%");
+	lcdShowString(X2_Y2,(u8 *)"状态：");  					//lcdShowString(X2_Y8,(u8 *) "%");
 	lcdShowString(X3_Y2,(u8 *)"电压：");						lcdShowString(X3_Y8,(u8 *)"V");
 	lcdShowString(X4_Y2,(u8 *)"电流：");						lcdShowString(X4_Y8,(u8 *) "A");
 }

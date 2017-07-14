@@ -37,7 +37,7 @@ void canInit(void)
 	CAN_InitStructure.CAN_SJW = CAN_SJW_1tq; //重新同步跳跃宽度1个时间单位
 	CAN_InitStructure.CAN_BS1 = CAN_BS1_3tq; //时间段1为3个时间单位
 	CAN_InitStructure.CAN_BS2 = CAN_BS2_2tq; //时间段2为2个时间单位
-	CAN_InitStructure.CAN_Prescaler = 24;  //时间单位长度为12	
+	CAN_InitStructure.CAN_Prescaler = 24;  //时间单位长度为24	
 	CAN_Init(CAN1, &CAN_InitStructure);
 	//波特率为：72M/2/24(1+3+2)=0.25 即250K
 /* CAN filter init */
@@ -57,8 +57,8 @@ void canInit(void)
 void canMsgTx(u8 Data1, u8 Data2, u8 Data3, u8 Data4)
 {
 	CanTxMsg TxMessage;
-	TxMessage.StdId = 0x181f02f5  ;	//标准标识符为0x00
-	TxMessage.IDE = CAN_ID_STD;//使用标准标识符
+	TxMessage.ExtId = 0x181f02f5  ;	//标准标识符为0x00
+	TxMessage.IDE = CAN_ID_EXT;//使用标准标识符
 	TxMessage.RTR = CAN_RTR_DATA;//为数据帧
 	TxMessage.DLC = 4;	//	消息的数据长度为2个字节
 	TxMessage.Data[0] = Data1; //第一个字节数据

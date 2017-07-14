@@ -4,7 +4,7 @@
 #include "stm32f10x.h"
 #include "stm32f10x_spi.h"
 
-#define _CS_PIN GPIOA, GPIO_Pin_1
+#define _CS_PIN GPIOA, GPIO_Pin_6
 
 #define _CS_H GPIO_SetBits(_CS_PIN);
 #define _CS_L GPIO_ResetBits(_CS_PIN);
