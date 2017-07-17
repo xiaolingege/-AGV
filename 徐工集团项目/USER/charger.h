@@ -70,4 +70,5 @@ static _CHARGER_STATUS checkChangerStatusOpen(void);
 static void setChangerOver(void);
 //static void clrChargerOver(void);
 static void setChangerMoudle(_CHANGER_MODULE mode);
+extern u16 getCurr(void);
 #endif // !_CHANGER_H

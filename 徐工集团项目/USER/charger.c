@@ -3,10 +3,14 @@
 #include "key.h"
 
 #define _MSG_RCV_DELAY 100
+
 #define setCloseDelay()\
 		 CloseDelay = 200
 #define clrChargerOver()\
 		ChargerOverFlag = FALSE
+
+#define isButtonPress()\
+		Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_13)
 
 extern xQueueHandle CanMsgQueue;
 static u32 CloseDelay = 0;
@@ -14,6 +18,9 @@ static _CHARGER_STATUS ChargerStatus = CLOSE;
 static bool ChargerOverFlag = FALSE;
 static u16 rcvCanCount = 0;
 static bool ChargerGoodStatus = FALSE;
+static u16 RcvCurr = 0x00;
+static u16 RcvVola = 0x00;
+
 
 /*主要控制循环*/
 //************************************
@@ -38,6 +45,10 @@ extern u8 chargerCTRLLoop(void)
 	}
 	else if (!isOnConnect())
 	{
+		if (checkChangerStatusOpen() == OPEN)
+		{
+			closeCharger();
+		}
 		return 0x03;//无车体连接
 	}
 	else if (isChargerNotGood())
@@ -78,8 +89,14 @@ extern u8 chargerCTRLLoop(void)
 //************************************
 static bool isOnConnect(void)
 {
-
-	return TRUE;
+	if(Bit_RESET == GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_8) )
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
 }
 
 //************************************
@@ -124,7 +141,7 @@ static bool isCloseDelay(void)
 		return FALSE;
 	}
 	canMsgTx(_CONNECT_CMD);
-	for (i = 0; i < 16; i++)
+	for (i = 0; i < 17; i++)
 	{
 		if (pdFALSE == xQueueReceive(CanMsgQueue, &RxMsg, 100))
 		{
@@ -185,7 +202,7 @@ static void closeCharger(void)
 	}
 	setCloseDelay();
 	ChargerStatus = CLOSE;
-	ChargerGoodStatus = FALSE;
+	//ChargerGoodStatus = FALSE;
 }
 //************************************
 // FunctionName:  setChanger
@@ -269,7 +286,8 @@ static bool isCurGood(void)
 	}
 	else
 	{
-		if (RxMsg < 0xf1310100)//设定小于某值时，充电结束，充电开始时设定充电未结束
+		RcvCurr = (RxMsg&0xffff);
+		if (RxMsg < 0xf13100E0)//设定小于某值时，充电结束，充电开始时设定充电未结束
 		{
 			setChangerOver();
 		}
@@ -296,10 +314,10 @@ static bool isOverCharge(void)
 //************************************
 static bool isEmmergency(void)
 {
-	if (Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_13))
+	if (isButtonPress())
 	{
 		vTaskDelay(5);
-		if (Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_13))
+		if (isButtonPress())
 		{
 			return TRUE;
 		}
@@ -352,5 +370,10 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
 static void setChangerOver(void)
 {
 	ChargerOverFlag = TRUE;
+}
+
+extern u16 getCurr(void)
+{
+	return RcvCurr;
 }
 

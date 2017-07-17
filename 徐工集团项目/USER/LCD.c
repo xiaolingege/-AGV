@@ -31,6 +31,22 @@ static void dataSend(u8 data)
 	vTaskDelay(1);
 	_CS_L;
 }
+void lcdShowHex(u8 x_add, u16 number)
+{
+		char arr[5] = { '\0' };
+	char *ptr = arr;
+	sprintf(arr, " %x", number);
+	cmdSend(x_add);
+	if (number < 10)
+	{
+		dataSend(' ');
+	}
+	while (*ptr != '\0')
+	{
+		dataSend(*ptr);
+		++ptr;
+	}
+}
 void lcdShowNumber(u8 x_add, float number)
 {
 	char arr[5] = { '\0' };

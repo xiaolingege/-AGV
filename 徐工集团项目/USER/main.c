@@ -32,7 +32,7 @@ int main(void)
 	usartConfig();
 	spiInit();
 	nvicConfig();
-	CanMsgQueue = xQueueCreate(16, sizeof(u32));
+	CanMsgQueue = xQueueCreate(17, sizeof(u32));
 	xTaskCreate((TaskFunction_t)usartLcdTask,\
 		(const char*)"UsartLcdTask",\
 		(u16)_USART_LCD_STK,\
@@ -78,6 +78,7 @@ void usartLcdTask(void * pvParameter)
 		//lcdShowNumber(X2_Y5, i);
 		lcdShowNumber(X3_Y5, i);
 		lcdShowElectricity(i);
+		
 		ttlLcdMsgSed(CHARGEVOL, 10);
 		ttlLcdMsgSed(CHARGECUR, 0);
 		ttlLcdMsgSed(CHARGETIME, 0);
@@ -119,8 +120,11 @@ void canChargeTask(void *pvParameter)
 	{
 		led1Flag ^= 1;
 		LED1(led1Flag);
-			ChargerStatusBack = chargerCTRLLoop();
-
+		ChargerStatusBack = chargerCTRLLoop();
+		if(ChargerStatusBack == 0x06)
+		{
+			vTaskDelay(60000);
+		}
 		vTaskDelay(500);
 	}
 }
@@ -136,7 +140,7 @@ void initShowStrings(void)
 	lcdShowString(X1_Y1,(u8 *)"哈工大机器人集团");
 	lcdShowString(X2_Y2,(u8 *)"状态：");  					//lcdShowString(X2_Y8,(u8 *) "%");
 	lcdShowString(X3_Y2,(u8 *)"电压：");						lcdShowString(X3_Y8,(u8 *)"V");
-	lcdShowString(X4_Y2,(u8 *)"电流：");						lcdShowString(X4_Y8,(u8 *) "A");
+	lcdShowString(X4_Y2,(u8 *)"电流：");					//	lcdShowString(X4_Y8,(u8 *) "A");
 }
 //************************************
 // FullName:  lcdShowElectricity
@@ -146,15 +150,17 @@ void initShowStrings(void)
 //************************************
 void lcdShowElectricity(float e)
 {
-	lcdShowNumber(X4_Y5, e);
-	if(e > 0)
-	{
-		lcdShowString(X4_Y5, (u8 *)"+");	
-	}
-	else
-	{
-		lcdShowString(X4_Y5, (u8 *) "-");	
-	}
+	//lcdShowNumber(X4_Y5, e);
+			lcdShowHex(X4_Y5, getCurr());
+
+// 	if(e > 0)
+// 	{
+// 		lcdShowString(X4_Y5, (u8 *)"+");	
+// 	}
+// 	else
+// 	{
+// 		lcdShowString(X4_Y5, (u8 *) "-");	
+// 	}
 
 }
 
