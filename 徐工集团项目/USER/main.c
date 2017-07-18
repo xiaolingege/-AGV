@@ -9,6 +9,9 @@
 #include "charger.h" 
 #include "led.h"
 #include "stdio.h"
+#include "TIM.h"
+
+#define _PROJECT_AGV 0
 
 xQueueHandle CanMsgQueue;
 u8 ChargerStatusBack;
@@ -32,24 +35,28 @@ int main(void)
 	usartConfig();
 	spiInit();
 	nvicConfig();
+	TIM2_Configuration();
+	
 	CanMsgQueue = xQueueCreate(17, sizeof(u32));
-	xTaskCreate((TaskFunction_t)usartLcdTask,\
-		(const char*)"UsartLcdTask",\
-		(u16)_USART_LCD_STK,\
-		(void *)NULL,\
-		(UBaseType_t)_USART_LCD_PRIO,\
+#if !_PROJECT_AGV
+	xTaskCreate((TaskFunction_t)usartLcdTask, \
+		(const char*)"UsartLcdTask", \
+		(u16)_USART_LCD_STK, \
+		(void *)NULL, \
+		(UBaseType_t)_USART_LCD_PRIO, \
 		(TaskHandle_t *)&UsartLcdTaskHandle);
-	xTaskCreate((TaskFunction_t)usartIrdaTask,\
-		(const char*)"UsartIrdaTask",\
-		(u16)_USART_IRDA_STK,\
-		(void *)NULL,\
-		(UBaseType_t)_USART_IRDA_PRIO,\
+#endif
+	xTaskCreate((TaskFunction_t)usartIrdaTask, \
+		(const char*)"UsartIrdaTask", \
+		(u16)_USART_IRDA_STK, \
+		(void *)NULL, \
+		(UBaseType_t)_USART_IRDA_PRIO, \
 		(TaskHandle_t *)&UsartIrdaTaskHandle);
-	xTaskCreate((TaskFunction_t)canChargeTask,\
-		(const char*)"CanChargeTask",\
-		(u16)_CAN_CHARGE_STK,\
-		(void *)NULL,\
-		(UBaseType_t)_CAN_CHARGE_PRIO,\
+	xTaskCreate((TaskFunction_t)canChargeTask, \
+		(const char*)"CanChargeTask", \
+		(u16)_CAN_CHARGE_STK, \
+		(void *)NULL, \
+		(UBaseType_t)_CAN_CHARGE_PRIO, \
 		(TaskHandle_t *)&CanChargeTaskHandle);
 	vTaskStartScheduler();
 }
@@ -64,27 +71,26 @@ void usartLcdTask(void * pvParameter)
 {
 	u8 showbyte = 0;
 	float i = 10.2;
- 	vTaskDelay(200);
-// 	_TTL_LCD_CLR;
- 	lcdInit();
-// 	vTaskDelay(500);
-// 	_TTL_LCD_SHOW;
-// 	vTaskDelay(2000);
+	vTaskDelay(200);
+	// 	_TTL_LCD_CLR;
+	lcdInit();
+	// 	vTaskDelay(500);
+	// 	_TTL_LCD_SHOW;
+	// 	vTaskDelay(2000);
 	initShowStrings();
 	while (1)
 	{
 		sprintf((u8 *)&showbyte, "%x", ChargerStatusBack);
 		lcdShowString(X2_Y6, &showbyte);
 		//lcdShowNumber(X2_Y5, i);
-		lcdShowNumber(X3_Y5, i);
+		lcdShowNumber(X3_Y5, ChargerTimeCount/10.0);
 		lcdShowElectricity(i);
-		
-		ttlLcdMsgSed(CHARGEVOL, 10);
-		ttlLcdMsgSed(CHARGECUR, 0);
-		ttlLcdMsgSed(CHARGETIME, 0);
-		ttlLcdMsgSed(MACHINESTATUS, 0);
-		ttlLcdMsgSed(BATTERY, TRUE);
-		ttlLcdMsgSed(COOL, FALSE);
+// 		ttlLcdMsgSed(CHARGEVOL, 10);
+// 		ttlLcdMsgSed(CHARGECUR, 0);
+// 		ttlLcdMsgSed(CHARGETIME, 0);
+// 		ttlLcdMsgSed(MACHINESTATUS, 0);
+// 		ttlLcdMsgSed(BATTERY, TRUE);
+// 		ttlLcdMsgSed(COOL, FALSE);
 	}
 }
 
@@ -115,16 +121,17 @@ void usartIrdaTask(void * pvParameter)
 void canChargeTask(void *pvParameter)
 {
 	u8 led1Flag = 0;
+	
 	pvParameter = (void *)pvParameter;
 	while (1)
 	{
 		led1Flag ^= 1;
 		LED1(led1Flag);
 		ChargerStatusBack = chargerCTRLLoop();
-		if(ChargerStatusBack == 0x06)
-		{
-			vTaskDelay(60000);
-		}
+		//if (ChargerStatusBack == 0x06)
+		//{
+		//	vTaskDelay(30000);
+		//}
 		vTaskDelay(500);
 	}
 }
@@ -137,10 +144,10 @@ void canChargeTask(void *pvParameter)
 //************************************
 void initShowStrings(void)
 {
-	lcdShowString(X1_Y1,(u8 *)"哈工大机器人集团");
-	lcdShowString(X2_Y2,(u8 *)"状态：");  					//lcdShowString(X2_Y8,(u8 *) "%");
-	lcdShowString(X3_Y2,(u8 *)"电压：");						lcdShowString(X3_Y8,(u8 *)"V");
-	lcdShowString(X4_Y2,(u8 *)"电流：");					//	lcdShowString(X4_Y8,(u8 *) "A");
+	lcdShowString(X1_Y1, (u8 *)"哈工大机器人集团");
+	lcdShowString(X2_Y2, (u8 *)"状态：");  					//lcdShowString(X2_Y8,(u8 *) "%");
+	lcdShowString(X3_Y2, (u8 *)"时间：");					//	lcdShowString(X3_Y8, (u8 *)"V");
+	lcdShowString(X4_Y2, (u8 *)"电流：");					//	lcdShowString(X4_Y8,(u8 *) "A");
 }
 //************************************
 // FullName:  lcdShowElectricity
@@ -151,16 +158,15 @@ void initShowStrings(void)
 void lcdShowElectricity(float e)
 {
 	//lcdShowNumber(X4_Y5, e);
-			lcdShowHex(X4_Y5, getCurr());
-
-// 	if(e > 0)
-// 	{
-// 		lcdShowString(X4_Y5, (u8 *)"+");	
-// 	}
-// 	else
-// 	{
-// 		lcdShowString(X4_Y5, (u8 *) "-");	
-// 	}
+	lcdShowHex(X4_Y5, getCurr());
+	// 	if(e > 0)
+	// 	{
+	// 		lcdShowString(X4_Y5, (u8 *)"+");	
+	// 	}
+	// 	else
+	// 	{
+	// 		lcdShowString(X4_Y5, (u8 *) "-");	
+	// 	}
 
 }
 

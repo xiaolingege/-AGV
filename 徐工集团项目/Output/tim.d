@@ -1,0 +1,14 @@
+..\Output\tim.o: TIM.c
+..\Output\tim.o: TIM.h
+..\Output\tim.o: ..\CMSIS\stm32f10x.h
+..\Output\tim.o: ..\CMSIS\core_cm3.h
+..\Output\tim.o: D:\Keil4.70\ARM\ARMCC\bin\..\include\stdint.h
+..\Output\tim.o: ..\CMSIS\system_stm32f10x.h
+..\Output\tim.o: ..\USER\stm32f10x_conf.h
+..\Output\tim.o: ..\FWlib\inc\stm32f10x_can.h
+..\Output\tim.o: ..\CMSIS\stm32f10x.h
+..\Output\tim.o: ..\FWlib\inc\stm32f10x_gpio.h
+..\Output\tim.o: ..\FWlib\inc\stm32f10x_rcc.h
+..\Output\tim.o: ..\FWlib\inc\stm32f10x_usart.h
+..\Output\tim.o: ..\FWlib\inc\misc.h
+..\Output\tim.o: ..\FWlib\inc\stm32f10x_tim.h

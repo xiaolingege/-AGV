@@ -1,5 +1,1 @@
--c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc 
--I D:\Keil4.70\ARM\RV31\INC 
--I D:\Keil4.70\ARM\CMSIS\Include 
--I D:\Keil4.70\ARM\Inc\ST\STM32F10x 
--DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\usart1.o" --omf_browse "..\Output\usart1.crf" --depend "..\Output\usart1.d" "usart1.c"
+-c --cpu Cortex-M3 -D__MICROLIB -g -O3 --apcs=interwork --split_sections --signed_chars -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\usart1.o" --omf_browse "..\Output\usart1.crf" --depend "..\Output\usart1.d" "usart1.c"

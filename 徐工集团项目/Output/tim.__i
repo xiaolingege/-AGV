@@ -1,0 +1,1 @@
+-c --cpu Cortex-M3 -D__MICROLIB -g -O3 --apcs=interwork --split_sections --signed_chars -I..\CMSIS -I..\FWlib\inc -I..\USER -I..\FreeRTOS\inc -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -o "..\Output\tim.o" --omf_browse "..\Output\tim.crf" --depend "..\Output\tim.d" "TIM.c"

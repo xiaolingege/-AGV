@@ -461,6 +461,11 @@
               <FileType>1</FileType>
               <FilePath>.\charger.c</FilePath>
             </File>
+            <File>
+              <FileName>TIM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\TIM.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -506,6 +511,11 @@
               <FileType>1</FileType>
               <FilePath>..\FWlib\src\stm32f10x_spi.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f10x_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FWlib\src\stm32f10x_tim.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -532,11 +542,6 @@
               <FilePath>..\FreeRTOS\src\croutine.c</FilePath>
             </File>
             <File>
-              <FileName>heap_2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\FreeRTOS\src\heap_2.c</FilePath>
-            </File>
-            <File>
               <FileName>list.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\FreeRTOS\src\list.c</FilePath>
@@ -560,6 +565,11 @@
               <FileName>timers.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\FreeRTOS\src\timers.c</FilePath>
+            </File>
+            <File>
+              <FileName>heap_4.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FreeRTOS\src\heap_4.c</FilePath>
             </File>
           </Files>
         </Group>

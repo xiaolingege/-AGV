@@ -59,9 +59,9 @@ static bool isCloseDelay(void);
 bool isChargerNotGood(void);
 static bool isChargeOver(void);
 
-static void openCharger(void);
-static void closeCharger(void);
-static void setCharger(void);
+static s8 openCharger(void);
+static s8 closeCharger(void);
+static s8 setCharger(void);
 static bool isBattryVolGood(void);
 static bool isCurGood(void);
 static bool isOverCharge(void);
