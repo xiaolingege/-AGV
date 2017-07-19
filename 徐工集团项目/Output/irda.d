@@ -1,0 +1,14 @@
+..\Output\irda.o: irda.c
+..\Output\irda.o: irda.h
+..\Output\irda.o: ..\CMSIS\stm32f10x.h
+..\Output\irda.o: ..\CMSIS\core_cm3.h
+..\Output\irda.o: D:\Keil4.70\ARM\ARMCC\bin\..\include\stdint.h
+..\Output\irda.o: ..\CMSIS\system_stm32f10x.h
+..\Output\irda.o: ..\USER\stm32f10x_conf.h
+..\Output\irda.o: ..\FWlib\inc\stm32f10x_can.h
+..\Output\irda.o: ..\CMSIS\stm32f10x.h
+..\Output\irda.o: ..\FWlib\inc\stm32f10x_gpio.h
+..\Output\irda.o: ..\FWlib\inc\stm32f10x_rcc.h
+..\Output\irda.o: ..\FWlib\inc\stm32f10x_usart.h
+..\Output\irda.o: ..\FWlib\inc\misc.h
+..\Output\irda.o: usart.h

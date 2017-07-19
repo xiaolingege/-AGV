@@ -10,6 +10,7 @@
 #include "led.h"
 #include "stdio.h"
 #include "TIM.h"
+#include "irda.h"
 
 #define _PROJECT_AGV 0
 
@@ -31,20 +32,20 @@ int main(void)
 	keyInit();	  //按键管脚初始化
 	ledGpioConfig();//LED管脚初始化
 	canGpioConfig();//CAN管脚初始化
+	spiInit();
 	canInit();//CAN初始化N模块	
 	usartConfig();
-	spiInit();
 	nvicConfig();
 	TIM2_Configuration();
-	
+
 	CanMsgQueue = xQueueCreate(17, sizeof(u32));
 #if !_PROJECT_AGV
-	xTaskCreate((TaskFunction_t)usartLcdTask, \
+	xTaskCreate((TaskFunction_t)spiLcdTask, \
 		(const char*)"UsartLcdTask", \
-		(u16)_USART_LCD_STK, \
+		(u16)_SPI_LCD_STK, \
 		(void *)NULL, \
-		(UBaseType_t)_USART_LCD_PRIO, \
-		(TaskHandle_t *)&UsartLcdTaskHandle);
+		(UBaseType_t)_SPI_LCD_PRIO, \
+		(TaskHandle_t *)&SPILcdTaskHandle);
 #endif
 	xTaskCreate((TaskFunction_t)usartIrdaTask, \
 		(const char*)"UsartIrdaTask", \
@@ -52,12 +53,22 @@ int main(void)
 		(void *)NULL, \
 		(UBaseType_t)_USART_IRDA_PRIO, \
 		(TaskHandle_t *)&UsartIrdaTaskHandle);
+#if !_PROJECT_AGV
 	xTaskCreate((TaskFunction_t)canChargeTask, \
 		(const char*)"CanChargeTask", \
 		(u16)_CAN_CHARGE_STK, \
 		(void *)NULL, \
 		(UBaseType_t)_CAN_CHARGE_PRIO, \
 		(TaskHandle_t *)&CanChargeTaskHandle);
+#endif
+#if _PROJECT_AGV
+	xTaskCreate((TaskFunction_t)ttlLcdTask, \
+		(const char*)"TtlLcdTask", \
+		(u16)_TTL_LCD_STK, \
+		(void *)NULL, \
+		(UBaseType_t)_TTL_LCD_PRIO, \
+		(TaskHandle_t *)&TtlLcdTaskHandle);
+#endif
 	vTaskStartScheduler();
 }
 
@@ -67,7 +78,7 @@ int main(void)
 // Qualifier:LCD驱动任务，完成LCD的驱动与现实
 // Parameter: void * pvParameter
 //************************************
-void usartLcdTask(void * pvParameter)
+void spiLcdTask(void * pvParameter)
 {
 	u8 showbyte = 0;
 	float i = 10.2;
@@ -82,8 +93,8 @@ void usartLcdTask(void * pvParameter)
 	{
 		sprintf((u8 *)&showbyte, "%x", ChargerStatusBack);
 		lcdShowString(X2_Y6, &showbyte);
-		//lcdShowNumber(X2_Y5, i);
-		lcdShowNumber(X3_Y5, ChargerTimeCount/10.0);
+        //lcdShowNumber(X2_Y5, i);
+		lcdShowNumber(X3_Y5, ChargerTimeCount / 10.0);
 		lcdShowElectricity(i);
 // 		ttlLcdMsgSed(CHARGEVOL, 10);
 // 		ttlLcdMsgSed(CHARGECUR, 0);
@@ -102,13 +113,18 @@ void usartLcdTask(void * pvParameter)
 //************************************
 void usartIrdaTask(void * pvParameter)
 {
+	u8 Debug_send_buff[6] = { 1,2,3,4,5,6 };
+	IRDA_RX_TYPE rcv_Msg_Irda;
 	pvParameter = (void *)pvParameter;
 	while (1)
 	{
-		LED2(0);
-		usart485Send((u8 *)"Helloworld\r\n", 12);
-		LED2(1);
-		vTaskDelay(1000);
+		Debug_send_buff[1] = rcvMsgFromIrda();
+        if(Debug_send_buff[1] != NO_RX)
+        {
+            usart485Send(Debug_send_buff, 6);
+        }
+		//usart485Send((u8 *)"Helloworld\r\n", 12);
+		vTaskDelay(20);
 	}
 }
 
@@ -121,17 +137,13 @@ void usartIrdaTask(void * pvParameter)
 void canChargeTask(void *pvParameter)
 {
 	u8 led1Flag = 0;
-	
+
 	pvParameter = (void *)pvParameter;
 	while (1)
 	{
 		led1Flag ^= 1;
 		LED1(led1Flag);
 		ChargerStatusBack = chargerCTRLLoop();
-		//if (ChargerStatusBack == 0x06)
-		//{
-		//	vTaskDelay(30000);
-		//}
 		vTaskDelay(500);
 	}
 }
@@ -169,4 +181,24 @@ void lcdShowElectricity(float e)
 	// 	}
 
 }
+
+void ttlLcdTask(void *pvParameter)
+{
+	float i = 10.2;
+	vTaskDelay(200);
+	_TTL_LCD_CLR;
+	vTaskDelay(500);
+	_TTL_LCD_SHOW;
+	vTaskDelay(2000);
+	while (1)
+	{
+		ttlLcdMsgSed(CHARGEVOL, 10);
+		ttlLcdMsgSed(CHARGECUR, 0);
+		ttlLcdMsgSed(CHARGETIME, 0);
+		ttlLcdMsgSed(MACHINESTATUS, 0);
+		ttlLcdMsgSed(BATTERY, TRUE);
+		ttlLcdMsgSed(COOL, FALSE);
+	}
+}
+
 

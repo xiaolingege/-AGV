@@ -36,3 +36,4 @@
 ..\Output\main.o: D:\Keil4.70\ARM\ARMCC\bin\..\include\stdio.h
 ..\Output\main.o: TIM.h
 ..\Output\main.o: ..\FWlib\inc\stm32f10x_tim.h
+..\Output\main.o: irda.h

@@ -47,6 +47,9 @@
 #define Set_DE  GPIO_SetBits(GPIOB,GPIO_Pin_0);
 #define Clr_DE  GPIO_ResetBits(GPIOB,GPIO_Pin_0);
 
+
+
+u16 CRC16(u8 *puchMsg, u16 usDataLen);
 void usartConfig(void);
 static void USART_Config(USART_TypeDef* USARTx, u32 rate);
 void USART_OUT(USART_TypeDef* USARTx, uint8_t *Data, uint16_t Len);
