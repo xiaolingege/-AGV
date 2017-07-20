@@ -5,8 +5,6 @@
 
 #define _MSG_RCV_DELAY 100
 
-//#define setCloseDelay()\
-//		 CloseDelay = 200
 #define clrChargerOver()\
 		ChargerOverFlag = FALSE
 
@@ -16,10 +14,12 @@
 extern xQueueHandle CanMsgQueue;
 extern xQueueHandle CloseTimeQueue;
 static u32 CloseDelay = 0;
-static _CHARGER_STATUS ChargerStatus = CLOSE;
+static _CHARGER_STATUS_TYPE ChargerStatus = CLOSE;
 static bool ChargerOverFlag = FALSE;
 static u16 rcvCanCount = 0;
 static bool ChargerGoodStatus = FALSE;
+static CHARGER_MOUDLE_TYPE MoudleGoodFlag = {FALSE, FALSE };
+static CHARGER_MOUDLE_TYPE MoudleOpenFlag = {FALSE, FALSE };
 static u16 RcvCurr = 0x00;
 static u16 RcvVola = 0x00;
 static bool AgvSetChargerOpen = FALSE;
@@ -35,6 +35,7 @@ static bool AgvConnectFlag = FALSE;
 //************************************
 extern u8 chargerCTRLLoop(void)
 {
+	u8 controlBack = 0;
 	if (isCloseDelay())
 	{
 		return 0x01;//正在延时关闭
@@ -74,23 +75,12 @@ extern u8 chargerCTRLLoop(void)
 	}
 	else
 	{
-		if (CLOSE == checkChangerStatusOpen())//充电板未打开，打开充电板
+		controlBack = controlStrtagy();
+		if (controlBack)
 		{
-			while(0 != setCharger());
-			while(0 != openCharger());
-			return 0x06;//正在打开充电桩
+			return controlBack;
 		}
-		else if (!isCurGood())//充电板已经打开，查询参数
-		{
-            closeCharger();
-			//while (0 != closeCharger());
-			return 0x07;//电流异常关闭
-		}
-		else if (isOverCharge())
-		{
-			while (0 != closeCharger());//充电完成关闭
-			return 0x08;
-		}
+		
 	}
 	return 0x09; //正常充电中
 }
@@ -104,15 +94,6 @@ extern u8 chargerCTRLLoop(void)
 static bool isOnConnect(void)
 {
 	return AgvConnectFlag;
-
-	//if (Bit_RESET == GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_8))
-	//{
-	//	return TRUE;
-	//}
-	//else
-	//{
-	//	return FALSE;
-	//}
 }
 
 //************************************
@@ -156,17 +137,43 @@ bool isChargerNotGood(void)
 	{
 		return FALSE;
 	}
-	canMsgTx(0,_CONNECT_CMD);
+	sendCmdToCharger(1, _CONNECT_CMD);
 	while(pdTRUE == xQueueReceive(CanMsgQueue, &RxMsg, 100))
 	{
 		i++;
 	}
 	if(i == 0)
 	{
+		MoudleGoodFlag.module0 = FALSE;
+		//ChargerGoodStatus = FALSE;
+		//return TRUE;
+	}
+	else
+	{
+		MoudleGoodFlag.module0 = TRUE;
+	}
+
+	i = 0;
+	sendCmdToCharger(2, _CONNECT_CMD);
+	while (pdTRUE == xQueueReceive(CanMsgQueue, &RxMsg, 100))
+	{
+		i++;
+	}
+	if (i == 0)
+	{
+		MoudleGoodFlag.module2 = FALSE;
+		//ChargerGoodStatus = FALSE;
+		//return TRUE;
+	}
+	else
+	{
+		MoudleGoodFlag.module2 = TRUE;
+	}
+	if ((MoudleGoodFlag.module0 | MoudleGoodFlag.module2) == FALSE)
+	{
 		ChargerGoodStatus = FALSE;
 		return TRUE;
 	}
-	rcvCanCount = 0;
 	ChargerGoodStatus = TRUE;
 	return FALSE;
 }
@@ -180,19 +187,41 @@ bool isChargerNotGood(void)
 static s8 openCharger(void)
 {
 	u32 RxMsg = 0;
-	canMsgTx(0,_OPEN_CMD);
-	xQueueReceive(CanMsgQueue, &RxMsg, 50);
-	if (RxMsg != _OPEN_CMD_BACK)
+	if (MoudleGoodFlag.module0 == TRUE)
 	{
-		return -1;
+		canMsgTx(0, _OPEN_CMD);
+		xQueueReceive(CanMsgQueue, &RxMsg, 50);
+		if (RxMsg != _OPEN_CMD_BACK)
+		{
+			return -1;
+		}
+		vTaskDelay(10);
+		canMsgTx(0, _OPEN_DATA);
+		xQueueReceive(CanMsgQueue, &RxMsg, 50);
+		if (RxMsg != _OPEN_DATA_BACK)
+		{
+			return -2;
+		}
+		MoudleOpenFlag.module0 = TRUE;
 	}
-	vTaskDelay(10);
-	canMsgTx(0,_OPEN_DATA);
-	xQueueReceive(CanMsgQueue, &RxMsg, 50);
-	if (RxMsg != _OPEN_DATA_BACK)
+	if (MoudleGoodFlag.module2 == TRUE)
 	{
-		return -2;
+		canMsgTx(2, _OPEN_CMD);
+		xQueueReceive(CanMsgQueue, &RxMsg, 50);
+		if (RxMsg != _OPEN_CMD_BACK)
+		{
+			return -1;
+		}
+		vTaskDelay(10);
+		canMsgTx(2, _OPEN_DATA);
+		xQueueReceive(CanMsgQueue, &RxMsg, 50);
+		if (RxMsg != _OPEN_DATA_BACK)
+		{
+			return -2;
+		}
+		MoudleOpenFlag.module2 = TRUE;
 	}
+
 	clrChargerOver();
 	ChargerStatus = OPEN;
 	START_TIME;
@@ -208,20 +237,40 @@ static s8 openCharger(void)
 static s8 closeCharger(void)
 {
 	u32 RxMsg = 0;
-	canMsgTx(0,_CLOSE_CMD);
-	xQueueReceive(CanMsgQueue, &RxMsg, 50);
-	if (RxMsg != _CLODE_CMD_BACK)
+	if (MoudleOpenFlag.module0 == TRUE)
 	{
-		return -1;
+		canMsgTx(0, _CLOSE_CMD);
+		xQueueReceive(CanMsgQueue, &RxMsg, 50);
+		if (RxMsg != _CLODE_CMD_BACK)
+		{
+			return -1;
+		}
+		vTaskDelay(10);
+		canMsgTx(0, _CLOSE_DATA);
+		xQueueReceive(CanMsgQueue, &RxMsg, 50);
+		if (RxMsg != _CLOSE_DATA_BACK)
+		{
+			return -2;
+		}
+		MoudleOpenFlag.module0 = FALSE;
 	}
-	vTaskDelay(10);
-	canMsgTx(0,_CLOSE_DATA);
-	xQueueReceive(CanMsgQueue, &RxMsg, 50);
-	if (RxMsg != _CLOSE_DATA_BACK)
+	if (MoudleOpenFlag.module2 == TRUE)
 	{
-		return -2;
+		canMsgTx(2, _CLOSE_CMD);
+		xQueueReceive(CanMsgQueue, &RxMsg, 50);
+		if (RxMsg != _CLODE_CMD_BACK)
+		{
+			return -1;
+		}
+		vTaskDelay(10);
+		canMsgTx(2, _CLOSE_DATA);
+		xQueueReceive(CanMsgQueue, &RxMsg, 50);
+		if (RxMsg != _CLOSE_DATA_BACK)
+		{
+			return -2;
+		}
+		MoudleOpenFlag.module2 = FALSE;
 	}
-//	setCloseDelay();
 	ChargerStatus = CLOSE;
 	STOP_TIME;
 	START_CLOSE;
@@ -260,6 +309,33 @@ static s8 setCharger(void)
 	}
 	vTaskDelay(10);
 	canMsgTx(0,_SET_CURR_DATA);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != _SET_CURR_DATA_BACK)
+	{
+		return -4;
+	}
+	canMsgTx(2, _SET_VOLATE_CMD);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != _SET_VOLATE_CMD_BACK)
+	{
+		return -1;
+	}
+	vTaskDelay(10);
+	canMsgTx(2, _SET_VOLATE_DATA);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != _SET_VOLATE_DATA_BACK)
+	{
+		return -2;
+	}
+	vTaskDelay(10);
+	canMsgTx(2, _SET_CURR_CMD);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != _SET_CURR_CMD_BACK)
+	{
+		return -3;
+	}
+	vTaskDelay(10);
+	canMsgTx(2, _SET_CURR_DATA);
 	xQueueReceive(CanMsgQueue, &RxMsg, 50);
 	if (RxMsg != _SET_CURR_DATA_BACK)
 	{
@@ -364,7 +440,7 @@ static bool isEmmergency(void)
 // Qualifier:查询当前充电机状态
 // Parameter: void
 //************************************
-static _CHARGER_STATUS checkChangerStatusOpen(void)
+static _CHARGER_STATUS_TYPE checkChangerStatusOpen(void)
 {
 	return ChargerStatus;
 }
@@ -425,5 +501,116 @@ extern void agvConnectSetCmd(void)
 extern void agvConnectResetCmd(void)
 {
 	AgvConnectFlag = FALSE;
+}
+
+static void sendCmdToCharger(u8 moudle, u8 data1, u8 data2, u8 data3, u8 data4)
+{
+	switch (moudle)
+	{
+	case 1:
+		canMsgTx(0, data1, data2, data3, data4);
+		break;
+	case 2:
+		canMsgTx(2, data1, data2, data3, data4);
+		break;
+	case 3:
+		canMsgTx(0, data1, data2, data3, data4);
+		vTaskDelay(10);
+		canMsgTx(2, data1, data2, data3, data4);
+		break;
+	default:
+		break;
+	}
+}
+
+static s8 controlStrtagy(void)
+{
+	u32 RxMsg = 0;
+	if (CLOSE == checkChangerStatusOpen())//充电板未打开，打开充电板
+	{
+		while (0 != setCharger());
+		while (0 != openCharger());
+		return 0x06;//正在打开充电桩
+	}
+	else if (!isCurGood())//充电板已经打开，查询参数
+	{
+		closeCharger();
+		//while (0 != closeCharger());
+		return 0x07;//电流异常关闭
+	}
+	else if (isOverCharge())
+	{
+		while (0 != closeCharger());//充电完成关闭
+		return 0x08;
+	}
+	else if ((ChargerTimeCount>600)&&(ChargerTimeCount%300==0))
+	{
+		if (MoudleOpenFlag.module0 == TRUE)
+		{
+			canMsgTx(0, _CLOSE_CMD);
+			xQueueReceive(CanMsgQueue, &RxMsg, 50);
+			if (RxMsg != _CLODE_CMD_BACK)
+			{
+				return -1;
+			}
+			vTaskDelay(10);
+			canMsgTx(0, _CLOSE_DATA);
+			xQueueReceive(CanMsgQueue, &RxMsg, 50);
+			if (RxMsg != _CLOSE_DATA_BACK)
+			{
+				return -2;
+			}
+			MoudleOpenFlag.module0 = FALSE;
+
+			canMsgTx(2, _OPEN_CMD);
+			xQueueReceive(CanMsgQueue, &RxMsg, 50);
+			if (RxMsg != _OPEN_CMD_BACK)
+			{
+				return -1;
+			}
+			vTaskDelay(10);
+			canMsgTx(2, _OPEN_DATA);
+			xQueueReceive(CanMsgQueue, &RxMsg, 50);
+			if (RxMsg != _OPEN_DATA_BACK)
+			{
+				return -2;
+			}
+			MoudleOpenFlag.module2 = TRUE;
+		}
+		else if(MoudleOpenFlag.module2 == TRUE)
+		{
+			canMsgTx(2, _CLOSE_CMD);
+			xQueueReceive(CanMsgQueue, &RxMsg, 50);
+			if (RxMsg != _CLODE_CMD_BACK)
+			{
+				return -1;
+			}
+			vTaskDelay(10);
+			canMsgTx(2, _CLOSE_DATA);
+			xQueueReceive(CanMsgQueue, &RxMsg, 50);
+			if (RxMsg != _CLOSE_DATA_BACK)
+			{
+				return -2;
+			}
+			MoudleOpenFlag.module2 = FALSE;
+
+			canMsgTx(0, _OPEN_CMD);
+			xQueueReceive(CanMsgQueue, &RxMsg, 50);
+			if (RxMsg != _OPEN_CMD_BACK)
+			{
+				return -1;
+			}
+			vTaskDelay(10);
+			canMsgTx(0, _OPEN_DATA);
+			xQueueReceive(CanMsgQueue, &RxMsg, 50);
+			if (RxMsg != _OPEN_DATA_BACK)
+			{
+				return -2;
+			}
+			MoudleOpenFlag.module0 = TRUE;
+		}
+	}
+
+	return 0x00;
 }
 

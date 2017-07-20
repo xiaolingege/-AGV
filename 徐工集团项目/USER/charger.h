@@ -8,7 +8,7 @@
 #include "timers.h"
 #include "queue.h"
 
-typedef enum { CLOSE = 0, OPEN = 1 } _CHARGER_STATUS;
+typedef enum { CLOSE = 0, OPEN = 1 } _CHARGER_STATUS_TYPE;
 typedef enum { module0 = 0, module1 = 1, module2 = 2, no_module = 3 } _CHANGER_MODULE;
 //配置充电电压参数命令
 #define _SET_VOLATE_CMD 0xf1, 0x02, 0x04, 0x21
@@ -52,6 +52,12 @@ typedef enum { module0 = 0, module1 = 1, module2 = 2, no_module = 3 } _CHANGER_M
 
 #define _CONNECT_CMD 0xf1, 0x01, 0x04, 0x30
 
+typedef struct _CHARGER_MOUDLE_TYPE
+{
+	bool module0;
+	bool module2;
+}CHARGER_MOUDLE_TYPE;
+
 //static void setCloseDelay(void);
 extern u8 chargerCTRLLoop(void);
 static bool isOnConnect(void);
@@ -66,7 +72,7 @@ static bool isBattryVolGood(void);
 static bool isCurGood(void);
 static bool isOverCharge(void);
 static bool isEmmergency(void);
-static _CHARGER_STATUS checkChangerStatusOpen(void);
+static _CHARGER_STATUS_TYPE checkChangerStatusOpen(void);
 static void setChangerOver(void);
 //static void clrChargerOver(void);
 static void setChangerMoudle(_CHANGER_MODULE mode);
@@ -75,4 +81,6 @@ extern void agvOpenSetCmd(void);
 extern void agvOpenResetCmd(void);
 extern void agvConnectSetCmd(void);
 extern void agvConnectResetCmd(void);
+static void sendCmdToCharger(u8 moudle, u8 data1, u8 data2, u8 data3, u8 data4);
+static s8 controlStrtagy(void);
 #endif // !_CHANGER_H

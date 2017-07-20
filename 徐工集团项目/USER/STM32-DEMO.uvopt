@@ -129,6 +129,11 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGUARM</Key>
+          <Name>瘩?</Name>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>DLGDARM</Key>
           <Name>(1010=-1,-1,-1,-1,0)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1009=-1,-1,-1,-1,0)(100=-1,-1,-1,-1,0)(110=-1,-1,-1,-1,0)(111=-1,-1,-1,-1,0)(1011=-1,-1,-1,-1,0)(180=-1,-1,-1,-1,0)(120=-1,-1,-1,-1,0)(121=-1,-1,-1,-1,0)(122=-1,-1,-1,-1,0)(123=-1,-1,-1,-1,0)(140=-1,-1,-1,-1,0)(240=-1,-1,-1,-1,0)(190=-1,-1,-1,-1,0)(200=-1,-1,-1,-1,0)(170=-1,-1,-1,-1,0)(130=-1,-1,-1,-1,0)(131=-1,-1,-1,-1,0)(132=-1,-1,-1,-1,0)(133=-1,-1,-1,-1,0)(160=-1,-1,-1,-1,0)(161=-1,-1,-1,-1,0)(162=-1,-1,-1,-1,0)(210=-1,-1,-1,-1,0)(211=-1,-1,-1,-1,0)(220=-1,-1,-1,-1,0)(221=-1,-1,-1,-1,0)(230=-1,-1,-1,-1,0)(234=-1,-1,-1,-1,0)(231=-1,-1,-1,-1,0)(232=-1,-1,-1,-1,0)(233=-1,-1,-1,-1,0)(150=-1,-1,-1,-1,0)(151=-1,-1,-1,-1,0)</Name>
         </SetRegEntry>
@@ -159,7 +164,7 @@
           <Type>0</Type>
           <LineNumber>26</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134228714</Address>
+          <Address>134229670</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -174,8 +179,8 @@
           <Number>1</Number>
           <Type>0</Type>
           <LineNumber>120</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134229440</Address>
+          <EnabledFlag>0</EnabledFlag>
+          <Address>134230712</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -190,8 +195,8 @@
           <Number>2</Number>
           <Type>0</Type>
           <LineNumber>123</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134229466</Address>
+          <EnabledFlag>0</EnabledFlag>
+          <Address>134230650</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -206,8 +211,8 @@
           <Number>3</Number>
           <Type>0</Type>
           <LineNumber>158</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134225154</Address>
+          <EnabledFlag>0</EnabledFlag>
+          <Address>134225204</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -238,7 +243,7 @@
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>ChargerCloseCount,0x0A</ItemText>
+          <ItemText>MoudleGoodFlag</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
@@ -353,10 +358,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>39</ColumnNumber>
+      <ColumnNumber>9</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>151</TopLine>
-      <CurrentLine>159</CurrentLine>
+      <TopLine>181</TopLine>
+      <CurrentLine>188</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -465,10 +470,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>5</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>45</TopLine>
-      <CurrentLine>50</CurrentLine>
+      <TopLine>46</TopLine>
+      <CurrentLine>85</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\LCD.c</PathWithFileName>
       <FilenameWithoutPath>LCD.c</FilenameWithoutPath>
@@ -529,10 +534,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>18</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>292</TopLine>
-      <CurrentLine>297</CurrentLine>
+      <TopLine>76</TopLine>
+      <CurrentLine>85</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\charger.c</PathWithFileName>
       <FilenameWithoutPath>charger.c</FilenameWithoutPath>
@@ -545,10 +550,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>40</ColumnNumber>
+      <ColumnNumber>44</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>40</TopLine>
-      <CurrentLine>50</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>11</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\TIM.c</PathWithFileName>
       <FilenameWithoutPath>TIM.c</FilenameWithoutPath>
@@ -563,8 +568,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>101</TopLine>
-      <CurrentLine>107</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\irda.c</PathWithFileName>
       <FilenameWithoutPath>irda.c</FilenameWithoutPath>
@@ -843,8 +848,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>3163</TopLine>
+      <CurrentLine>3166</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\FreeRTOS\src\tasks.c</PathWithFileName>
       <FilenameWithoutPath>tasks.c</FilenameWithoutPath>
