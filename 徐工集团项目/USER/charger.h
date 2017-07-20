@@ -71,4 +71,8 @@ static void setChangerOver(void);
 //static void clrChargerOver(void);
 static void setChangerMoudle(_CHANGER_MODULE mode);
 extern u16 getCurr(void);
+extern void agvOpenSetCmd(void);
+extern void agvOpenResetCmd(void);
+extern void agvConnectSetCmd(void);
+extern void agvConnectResetCmd(void);
 #endif // !_CHANGER_H

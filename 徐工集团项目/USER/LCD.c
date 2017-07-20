@@ -64,13 +64,23 @@ void lcdShowNumber(u8 x_add, float number)
 	}
 	sprintf(arr, " %.1f", number);
 	cmdSend(x_add);
-	if (number < 10)
+    if (number < 100)
 	{
+        dataSend(' ');
 		dataSend(' ');
 	}
-		if (number < 100)
+
+    if(number < 1000)
+    {
+        dataSend(' ');
+    }
+    else  if (number < 100)
 	{
+        dataSend(' ');
 		dataSend(' ');
+	} else if (number < 100)
+	{
+        dataSend(' ');
 		dataSend(' ');
 	}
 	while (*ptr != '\0')

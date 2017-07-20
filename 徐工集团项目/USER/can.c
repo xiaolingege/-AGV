@@ -54,10 +54,17 @@ void canInit(void)
 	CAN_ITConfig(CAN1, CAN_IT_FMP0, ENABLE); //使能FIFO0消息挂号中断
 }
 /* 发送两个字节的数据*/
-void canMsgTx(u8 Data1, u8 Data2, u8 Data3, u8 Data4)
+void canMsgTx(u8 module, u8 Data1, u8 Data2, u8 Data3, u8 Data4)
 {
 	CanTxMsg TxMessage;
-	TxMessage.ExtId = 0x181f02f5  ;	//标准标识符为0x00
+	if (module == 0x00)
+	{
+		TxMessage.ExtId = 0x181f02f5;	//标准标识符为0x00
+	}
+	else if(module == 0x02)
+	{
+		TxMessage.ExtId = 0x181f22f5;	//标准标识符为0x00
+	}
 	TxMessage.IDE = CAN_ID_EXT;//使用标准标识符
 	TxMessage.RTR = CAN_RTR_DATA;//为数据帧
 	TxMessage.DLC = 4;	//	消息的数据长度为2个字节

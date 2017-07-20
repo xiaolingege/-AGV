@@ -5,8 +5,8 @@
 
 #define _MSG_RCV_DELAY 100
 
-#define setCloseDelay()\
-		 CloseDelay = 200
+//#define setCloseDelay()\
+//		 CloseDelay = 200
 #define clrChargerOver()\
 		ChargerOverFlag = FALSE
 
@@ -14,6 +14,7 @@
 		Bit_RESET == GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_13)
 
 extern xQueueHandle CanMsgQueue;
+extern xQueueHandle CloseTimeQueue;
 static u32 CloseDelay = 0;
 static _CHARGER_STATUS ChargerStatus = CLOSE;
 static bool ChargerOverFlag = FALSE;
@@ -21,6 +22,9 @@ static u16 rcvCanCount = 0;
 static bool ChargerGoodStatus = FALSE;
 static u16 RcvCurr = 0x00;
 static u16 RcvVola = 0x00;
+static bool AgvSetChargerOpen = FALSE;
+static bool AgvConnectFlag = FALSE;
+
 
 /*主要控制循环*/
 //************************************
@@ -43,6 +47,11 @@ extern u8 chargerCTRLLoop(void)
 		}
 		return 0x02;//按下急停
 	}
+	else if (isChargerNotGood())
+	{
+		return 0x04;//充电板异常(连接检测)
+	}
+
 	else if (!isOnConnect())
 	{
 		if (checkChangerStatusOpen() == OPEN)
@@ -51,9 +60,13 @@ extern u8 chargerCTRLLoop(void)
 		}
 		return 0x03;//无车体连接
 	}
-	else if (isChargerNotGood())
+	else if(!AgvSetChargerOpen)
 	{
-		return 0x04;//充电板异常(连接检测)
+		if (checkChangerStatusOpen()== OPEN)
+		{
+			while (0 != closeCharger());
+		}
+		return 0x0a;
 	}
 	else if (!isBattryVolGood())
 	{
@@ -69,7 +82,8 @@ extern u8 chargerCTRLLoop(void)
 		}
 		else if (!isCurGood())//充电板已经打开，查询参数
 		{
-			while (0 != closeCharger());
+            closeCharger();
+			//while (0 != closeCharger());
 			return 0x07;//电流异常关闭
 		}
 		else if (isOverCharge())
@@ -89,14 +103,16 @@ extern u8 chargerCTRLLoop(void)
 //************************************
 static bool isOnConnect(void)
 {
-	if (Bit_RESET == GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_8))
-	{
-		return TRUE;
-	}
-	else
-	{
-		return FALSE;
-	}
+	return AgvConnectFlag;
+
+	//if (Bit_RESET == GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_8))
+	//{
+	//	return TRUE;
+	//}
+	//else
+	//{
+	//	return FALSE;
+	//}
 }
 
 //************************************
@@ -111,13 +127,13 @@ static bool isCloseDelay(void)
 	{
 		return FALSE;
 	}
-	else if (0 == CloseDelay)
+	else if (0 == ChargerCloseCount)
 	{
+		STOP_CLOSE;
 		return FALSE;
 	}
 	else
 	{
-		CloseDelay--;
 		vTaskDelay(500);
 		return TRUE;
 	}
@@ -140,7 +156,7 @@ bool isChargerNotGood(void)
 	{
 		return FALSE;
 	}
-	canMsgTx(_CONNECT_CMD);
+	canMsgTx(0,_CONNECT_CMD);
 	while(pdTRUE == xQueueReceive(CanMsgQueue, &RxMsg, 100))
 	{
 		i++;
@@ -150,14 +166,6 @@ bool isChargerNotGood(void)
 		ChargerGoodStatus = FALSE;
 		return TRUE;
 	}
-// 	for (i = 0; i < 17; i++)
-// 	{
-// 		if (pdFALSE == xQueueReceive(CanMsgQueue, &RxMsg, 100))
-// 		{
-// 			ChargerGoodStatus = FALSE;
-// 			return TRUE;
-// 		}
-// 	}
 	rcvCanCount = 0;
 	ChargerGoodStatus = TRUE;
 	return FALSE;
@@ -172,14 +180,14 @@ bool isChargerNotGood(void)
 static s8 openCharger(void)
 {
 	u32 RxMsg = 0;
-	canMsgTx(_OPEN_CMD);
+	canMsgTx(0,_OPEN_CMD);
 	xQueueReceive(CanMsgQueue, &RxMsg, 50);
 	if (RxMsg != _OPEN_CMD_BACK)
 	{
 		return -1;
 	}
 	vTaskDelay(10);
-	canMsgTx(_OPEN_DATA);
+	canMsgTx(0,_OPEN_DATA);
 	xQueueReceive(CanMsgQueue, &RxMsg, 50);
 	if (RxMsg != _OPEN_DATA_BACK)
 	{
@@ -200,22 +208,24 @@ static s8 openCharger(void)
 static s8 closeCharger(void)
 {
 	u32 RxMsg = 0;
-	canMsgTx(_CLOSE_CMD);
+	canMsgTx(0,_CLOSE_CMD);
 	xQueueReceive(CanMsgQueue, &RxMsg, 50);
 	if (RxMsg != _CLODE_CMD_BACK)
 	{
 		return -1;
 	}
 	vTaskDelay(10);
-	canMsgTx(_CLOSE_DATA);
+	canMsgTx(0,_CLOSE_DATA);
 	xQueueReceive(CanMsgQueue, &RxMsg, 50);
 	if (RxMsg != _CLOSE_DATA_BACK)
 	{
 		return -2;
 	}
-	setCloseDelay();
+//	setCloseDelay();
 	ChargerStatus = CLOSE;
 	STOP_TIME;
+	START_CLOSE;
+	agvOpenResetCmd();
 	return 0;
 }
 //************************************
@@ -228,28 +238,28 @@ static s8 setCharger(void)
 {
 	//发送配置命令并等待反馈
 	u32 RxMsg = 0;
-	canMsgTx(_SET_VOLATE_CMD);
+	canMsgTx(0,_SET_VOLATE_CMD);
 	xQueueReceive(CanMsgQueue, &RxMsg, 50);
 	if (RxMsg != _SET_VOLATE_CMD_BACK)
 	{
 		return -1;
 	}
 	vTaskDelay(10);
-	canMsgTx(_SET_VOLATE_DATA);
+	canMsgTx(0,_SET_VOLATE_DATA);
 	xQueueReceive(CanMsgQueue, &RxMsg, 50);
 	if (RxMsg != _SET_VOLATE_DATA_BACK)
 	{
 		return -2;
 	}
 	vTaskDelay(10);
-	canMsgTx(_SET_CURR_CMD);
+	canMsgTx(0,_SET_CURR_CMD);
 	xQueueReceive(CanMsgQueue, &RxMsg, 50);
 	if (RxMsg != _SET_CURR_CMD_BACK)
 	{
 		return -3;
 	}
 	vTaskDelay(10);
-	canMsgTx(_SET_CURR_DATA);
+	canMsgTx(0,_SET_CURR_DATA);
 	xQueueReceive(CanMsgQueue, &RxMsg, 50);
 	if (RxMsg != _SET_CURR_DATA_BACK)
 	{
@@ -267,14 +277,14 @@ static s8 setCharger(void)
 static bool isBattryVolGood(void)
 {
 	u32 RxMsg = 0;
-	canMsgTx(_CHECK_BATTRY_CMD);
+	canMsgTx(0,_CHECK_BATTRY_CMD);
 	xQueueReceive(CanMsgQueue, &RxMsg, 80);
 	if (RxMsg != _CHECK_BATTRY_CMD_BACK)
 	{
 		return FALSE;
 	}
 	vTaskDelay(10);
-	canMsgTx(_CHECK_BATTY_DATA);
+	canMsgTx(0,_CHECK_BATTY_DATA);
 	if (pdFALSE == xQueueReceive(CanMsgQueue, &RxMsg, 50))
 	{
 		return FALSE;
@@ -291,14 +301,14 @@ static bool isBattryVolGood(void)
 static bool isCurGood(void)
 {
 	u32 RxMsg = 0;
-	canMsgTx(_CHECK_CURR_CMD);
+	canMsgTx(0,_CHECK_CURR_CMD);
 	xQueueReceive(CanMsgQueue, &RxMsg, 50);
 	if (RxMsg != _CHECK_CURR_CMD_BACK)
 	{
 		return FALSE;
 	}
 	vTaskDelay(10);
-	canMsgTx(_CHECK_CURR_DATA);
+	canMsgTx(0,_CHECK_CURR_DATA);
 	if (pdFALSE == xQueueReceive(CanMsgQueue, &RxMsg, 50))
 	{
 		return FALSE;
@@ -306,7 +316,7 @@ static bool isCurGood(void)
 	else
 	{
 		RcvCurr = (RxMsg & 0xffff);
-		if (ChargerTimeCount < 1200)
+		if (ChargerTimeCount < 60)
 		{
 			return TRUE;
 		}
@@ -397,5 +407,23 @@ static void setChangerOver(void)
 extern u16 getCurr(void)
 {
 	return RcvCurr;
+}
+
+extern void agvOpenSetCmd(void)
+{
+	AgvSetChargerOpen = TRUE;
+}
+extern void agvOpenResetCmd(void)
+{
+	AgvSetChargerOpen = FALSE;
+}
+
+extern void agvConnectSetCmd(void)
+{
+	AgvConnectFlag = TRUE;
+}
+extern void agvConnectResetCmd(void)
+{
+	AgvConnectFlag = FALSE;
 }
 

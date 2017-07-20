@@ -11,8 +11,8 @@
 #define _TTL_LCD_PRIO 2
 
 #define _SPI_LCD_STK 100
-#define _USART_IRDA_STK 500
-#define _CAN_CHARGE_STK 300
+#define _USART_IRDA_STK 100
+#define _CAN_CHARGE_STK 400
 #define _TTL_LCD_STK 50
 
 TaskHandle_t SPILcdTaskHandle;

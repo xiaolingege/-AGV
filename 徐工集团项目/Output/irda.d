@@ -12,3 +12,15 @@
 ..\Output\irda.o: ..\FWlib\inc\stm32f10x_usart.h
 ..\Output\irda.o: ..\FWlib\inc\misc.h
 ..\Output\irda.o: usart.h
+..\Output\irda.o: ..\FreeRTOS\inc\FreeRTOS.h
+..\Output\irda.o: D:\Keil4.70\ARM\ARMCC\bin\..\include\stddef.h
+..\Output\irda.o: ..\FreeRTOS\inc\FreeRTOSConfig.h
+..\Output\irda.o: ..\FreeRTOS\inc\projdefs.h
+..\Output\irda.o: ..\FreeRTOS\inc\portable.h
+..\Output\irda.o: ..\FreeRTOS\inc\deprecated_definitions.h
+..\Output\irda.o: ..\FreeRTOS\inc\portmacro.h
+..\Output\irda.o: ..\FreeRTOS\inc\mpu_wrappers.h
+..\Output\irda.o: ..\FreeRTOS\inc\task.h
+..\Output\irda.o: ..\FreeRTOS\inc\list.h
+..\Output\irda.o: ..\FreeRTOS\inc\timers.h
+..\Output\irda.o: ..\FreeRTOS\inc\queue.h

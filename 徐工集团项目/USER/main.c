@@ -37,6 +37,7 @@ int main(void)
 	usartConfig();
 	nvicConfig();
 	TIM2_Configuration();
+    TIM3_Configuration();
 
 	CanMsgQueue = xQueueCreate(17, sizeof(u32));
 #if !_PROJECT_AGV
@@ -94,7 +95,7 @@ void spiLcdTask(void * pvParameter)
 		sprintf((u8 *)&showbyte, "%x", ChargerStatusBack);
 		lcdShowString(X2_Y6, &showbyte);
         //lcdShowNumber(X2_Y5, i);
-		lcdShowNumber(X3_Y5, ChargerTimeCount / 10.0);
+		lcdShowNumber(X3_Y4, ChargerTimeCount/60.0f);
 		lcdShowElectricity(i);
 // 		ttlLcdMsgSed(CHARGEVOL, 10);
 // 		ttlLcdMsgSed(CHARGECUR, 0);
@@ -113,17 +114,29 @@ void spiLcdTask(void * pvParameter)
 //************************************
 void usartIrdaTask(void * pvParameter)
 {
-	u8 Debug_send_buff[6] = { 1,2,3,4,5,6 };
+	u8 cmdRcv = 0;
 	IRDA_RX_TYPE rcv_Msg_Irda;
 	pvParameter = (void *)pvParameter;
 	while (1)
 	{
-		Debug_send_buff[1] = rcvMsgFromIrda();
-        if(Debug_send_buff[1] != NO_RX)
+		cmdRcv = rcvMsgFromIrda();
+        if(cmdRcv != NO_RX)
         {
-            usart485Send(Debug_send_buff, 6);
+			msgFeedBackToIrda(ChargerStatusBack, cmdRcv);
         }
-		//usart485Send((u8 *)"Helloworld\r\n", 12);
+		if (cmdRcv == CHECK_STATUS && ChargerStatusBack == 0x03)
+		{
+			agvConnectSetCmd();
+		}
+		else if (cmdRcv == REQUEST_CHARGE && ChargerStatusBack == 0x0a)
+		{
+			agvOpenSetCmd();
+		}
+		else if(cmdRcv == REQUEST_LEAVE)
+		{
+			agvConnectResetCmd();
+			agvOpenResetCmd();
+		}
 		vTaskDelay(20);
 	}
 }
