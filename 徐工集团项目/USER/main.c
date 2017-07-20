@@ -62,7 +62,7 @@ int main(void)
 		(UBaseType_t)_CAN_CHARGE_PRIO, \
 		(TaskHandle_t *)&CanChargeTaskHandle);
 #endif
-#if _PROJECT_AGV
+#if !_PROJECT_AGV
 	xTaskCreate((TaskFunction_t)ttlLcdTask, \
 		(const char*)"TtlLcdTask", \
 		(u16)_TTL_LCD_STK, \
@@ -115,7 +115,6 @@ void spiLcdTask(void * pvParameter)
 void usartIrdaTask(void * pvParameter)
 {
 	u8 cmdRcv = 0;
-	IRDA_RX_TYPE rcv_Msg_Irda;
 	pvParameter = (void *)pvParameter;
 	while (1)
 	{
@@ -183,7 +182,7 @@ void initShowStrings(void)
 void lcdShowElectricity(float e)
 {
 	//lcdShowNumber(X4_Y5, e);
-	lcdShowHex(X4_Y5, getCurr());
+	lcdShowNumber(X4_Y4, getCurr()/210.0f);
 	// 	if(e > 0)
 	// 	{
 	// 		lcdShowString(X4_Y5, (u8 *)"+");	
@@ -197,20 +196,23 @@ void lcdShowElectricity(float e)
 
 void ttlLcdTask(void *pvParameter)
 {
-	float i = 10.2;
-	vTaskDelay(200);
+    float i = 0;
+	vTaskDelay(2000);
 	_TTL_LCD_CLR;
 	vTaskDelay(500);
 	_TTL_LCD_SHOW;
 	vTaskDelay(2000);
 	while (1)
 	{
-		ttlLcdMsgSed(CHARGEVOL, 10);
-		ttlLcdMsgSed(CHARGECUR, 0);
-		ttlLcdMsgSed(CHARGETIME, 0);
+        
+        i+=0.1;
+ 		ttlLcdMsgSed(CHARGEVOL, i);
+ 		ttlLcdMsgSed(CHARGECUR, getCurr()/210.0f);
+		ttlLcdMsgSed(CHARGETIME,  ChargerTimeCount/60.0f);
 		ttlLcdMsgSed(MACHINESTATUS, 0);
 		ttlLcdMsgSed(BATTERY, TRUE);
-		ttlLcdMsgSed(COOL, FALSE);
+		ttlLcdMsgSed(COOL, ChargerCloseCount);
+        vTaskDelay(100);
 	}
 }
 

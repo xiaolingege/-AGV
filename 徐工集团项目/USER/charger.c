@@ -3,6 +3,8 @@
 #include "key.h"
 #include "TIM.h"
 
+#define _CLOSE_CUR 0x100ul//充电结束电流
+
 #define _MSG_RCV_DELAY 100
 
 #define clrChargerOver()\
@@ -13,10 +15,8 @@
 
 extern xQueueHandle CanMsgQueue;
 extern xQueueHandle CloseTimeQueue;
-static u32 CloseDelay = 0;
 static _CHARGER_STATUS_TYPE ChargerStatus = CLOSE;
 static bool ChargerOverFlag = FALSE;
-static u16 rcvCanCount = 0;
 static bool ChargerGoodStatus = FALSE;
 static CHARGER_MOUDLE_TYPE MoudleGoodFlag = {FALSE, FALSE };
 static CHARGER_MOUDLE_TYPE MoudleOpenFlag = {FALSE, FALSE };
@@ -52,7 +52,6 @@ extern u8 chargerCTRLLoop(void)
 	{
 		return 0x04;//充电板异常(连接检测)
 	}
-
 	else if (!isOnConnect())
 	{
 		if (checkChangerStatusOpen() == OPEN)
@@ -80,9 +79,47 @@ extern u8 chargerCTRLLoop(void)
 		{
 			return controlBack;
 		}
-		
 	}
 	return 0x09; //正常充电中
+}
+
+static s8 controlStrtagy(void)
+{
+	if (CLOSE == checkChangerStatusOpen())//充电板未打开，打开充电板
+	{
+		while (0 != setCharger());
+		while (0 != openCharger());
+		return 0x06;//正在打开充电桩
+	}
+	else if (!isCurGood())//充电板已经打开，查询参数
+	{
+		closeCharger();
+		//while (0 != closeCharger());
+		return 0x07;//电流异常关闭
+	}
+	else if (isOverCharge())
+	{
+		while (0 != closeCharger());//充电完成关闭
+		return 0x08;
+	}
+	else if ((ChargerTimeCount >= 600) && (ChargerTimeCount % 600 == 0))
+	{
+		if (MoudleOpenFlag.module0 == TRUE)
+		{
+			closeMoudle(module0);
+			MoudleOpenFlag.module0 = FALSE;
+			openMdoule(module2);
+			MoudleOpenFlag.module2 = TRUE;
+		}
+		else if (MoudleOpenFlag.module2 == TRUE)
+		{
+			closeMoudle(module2);
+			MoudleOpenFlag.module2 = FALSE;
+			openMdoule(module0);
+			MoudleOpenFlag.module0 = TRUE;
+		}
+	}
+	return 0x00;
 }
 
 //************************************
@@ -120,6 +157,26 @@ static bool isCloseDelay(void)
 	}
 }
 
+static bool isModuleConnect(_CHANGER_MODULE moudle)
+{
+	u8 i = 0;
+    u32 RxMsg = 0;
+	sendCmdToCharger(moudle, _CONNECT_CMD);
+	while (pdTRUE == xQueueReceive(CanMsgQueue, &RxMsg, 100))
+	{
+		i++;
+	}
+	if (i == 0)
+	{
+		return FALSE;
+	}
+	else
+	{
+		return TRUE;
+	}
+}
+
+
 /*充电板查询正常*/
 //************************************
 // FullName:  isChangerNotGood
@@ -131,41 +188,16 @@ bool isChargerNotGood(void)
 {
 	//发送查询命令
 	//回馈命令等待并验证
-	u8 i = 0;
-	u32 RxMsg = 0;
 	if (ChargerGoodStatus == TRUE)
 	{
 		return FALSE;
 	}
-	sendCmdToCharger(1, _CONNECT_CMD);
-	while(pdTRUE == xQueueReceive(CanMsgQueue, &RxMsg, 100))
-	{
-		i++;
-	}
-	if(i == 0)
-	{
-		MoudleGoodFlag.module0 = FALSE;
-		//ChargerGoodStatus = FALSE;
-		//return TRUE;
-	}
-	else
+
+	if (isModuleConnect(module0))//判断模块1是否连接正常
 	{
 		MoudleGoodFlag.module0 = TRUE;
 	}
-
-	i = 0;
-	sendCmdToCharger(2, _CONNECT_CMD);
-	while (pdTRUE == xQueueReceive(CanMsgQueue, &RxMsg, 100))
-	{
-		i++;
-	}
-	if (i == 0)
-	{
-		MoudleGoodFlag.module2 = FALSE;
-		//ChargerGoodStatus = FALSE;
-		//return TRUE;
-	}
-	else
+	if (isModuleConnect(module2))//判断模块2是否连接正常
 	{
 		MoudleGoodFlag.module2 = TRUE;
 	}
@@ -178,6 +210,25 @@ bool isChargerNotGood(void)
 	return FALSE;
 }
 
+static s8 openMdoule(_CHANGER_MODULE module)
+{
+	u32 RxMsg = 0;
+	canMsgTx(module, _OPEN_CMD);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != _OPEN_CMD_BACK)
+	{
+		return -1;
+	}
+	vTaskDelay(10);
+	canMsgTx(module, _OPEN_DATA);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != _OPEN_DATA_BACK)
+	{
+		return -2;
+	}
+    return 0;
+}
+
 //************************************
 // FullName:  openChanger
 // Returns:   void
@@ -186,45 +237,39 @@ bool isChargerNotGood(void)
 //************************************
 static s8 openCharger(void)
 {
-	u32 RxMsg = 0;
 	if (MoudleGoodFlag.module0 == TRUE)
 	{
-		canMsgTx(0, _OPEN_CMD);
-		xQueueReceive(CanMsgQueue, &RxMsg, 50);
-		if (RxMsg != _OPEN_CMD_BACK)
-		{
-			return -1;
-		}
-		vTaskDelay(10);
-		canMsgTx(0, _OPEN_DATA);
-		xQueueReceive(CanMsgQueue, &RxMsg, 50);
-		if (RxMsg != _OPEN_DATA_BACK)
-		{
-			return -2;
-		}
+		openMdoule(module0);
 		MoudleOpenFlag.module0 = TRUE;
 	}
 	if (MoudleGoodFlag.module2 == TRUE)
 	{
-		canMsgTx(2, _OPEN_CMD);
-		xQueueReceive(CanMsgQueue, &RxMsg, 50);
-		if (RxMsg != _OPEN_CMD_BACK)
-		{
-			return -1;
-		}
-		vTaskDelay(10);
-		canMsgTx(2, _OPEN_DATA);
-		xQueueReceive(CanMsgQueue, &RxMsg, 50);
-		if (RxMsg != _OPEN_DATA_BACK)
-		{
-			return -2;
-		}
+		openMdoule(module2);
 		MoudleOpenFlag.module2 = TRUE;
 	}
 
 	clrChargerOver();
 	ChargerStatus = OPEN;
 	START_TIME;
+	return 0;
+}
+
+static s8 closeMoudle(_CHANGER_MODULE module)
+{
+	u32 RxMsg = 0;
+	canMsgTx(module, _CLOSE_CMD);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != _CLODE_CMD_BACK)
+	{
+		return -1;
+	}
+	vTaskDelay(10);
+	canMsgTx(module, _CLOSE_DATA);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != _CLOSE_DATA_BACK)
+	{
+		return -2;
+	}
 	return 0;
 }
 
@@ -236,42 +281,26 @@ static s8 openCharger(void)
 //************************************
 static s8 closeCharger(void)
 {
-	u32 RxMsg = 0;
 	if (MoudleOpenFlag.module0 == TRUE)
 	{
-		canMsgTx(0, _CLOSE_CMD);
-		xQueueReceive(CanMsgQueue, &RxMsg, 50);
-		if (RxMsg != _CLODE_CMD_BACK)
+		if (0 == closeMoudle(module0))
 		{
-			return -1;
+			MoudleOpenFlag.module0 = FALSE;
 		}
-		vTaskDelay(10);
-		canMsgTx(0, _CLOSE_DATA);
-		xQueueReceive(CanMsgQueue, &RxMsg, 50);
-		if (RxMsg != _CLOSE_DATA_BACK)
-		{
-			return -2;
-		}
-		MoudleOpenFlag.module0 = FALSE;
 	}
 	if (MoudleOpenFlag.module2 == TRUE)
 	{
-		canMsgTx(2, _CLOSE_CMD);
-		xQueueReceive(CanMsgQueue, &RxMsg, 50);
-		if (RxMsg != _CLODE_CMD_BACK)
+		if (0 == closeMoudle(module2))
 		{
-			return -1;
-		}
-		vTaskDelay(10);
-		canMsgTx(2, _CLOSE_DATA);
-		xQueueReceive(CanMsgQueue, &RxMsg, 50);
-		if (RxMsg != _CLOSE_DATA_BACK)
-		{
-			return -2;
+			MoudleOpenFlag.module2 = FALSE;
 		}
 		MoudleOpenFlag.module2 = FALSE;
 	}
-	ChargerStatus = CLOSE;
+	if ((MoudleOpenFlag.module0 | MoudleOpenFlag.module2) == FALSE)
+	{
+		ChargerStatus = CLOSE;
+	}
+    RcvCurr = 0;
 	STOP_TIME;
 	START_CLOSE;
 	agvOpenResetCmd();
@@ -368,6 +397,7 @@ static bool isBattryVolGood(void)
 	return TRUE;
 }
 
+
 //************************************
 // FunctionName:  isCurGood
 // Returns:   bool
@@ -377,31 +407,43 @@ static bool isBattryVolGood(void)
 static bool isCurGood(void)
 {
 	u32 RxMsg = 0;
-	canMsgTx(0,_CHECK_CURR_CMD);
+	u32 Cur0 = 0;
+	u32 Cur2 = 0;
+	canMsgTx(module0,_CHECK_CURR_CMD);
 	xQueueReceive(CanMsgQueue, &RxMsg, 50);
 	if (RxMsg != _CHECK_CURR_CMD_BACK)
 	{
 		return FALSE;
 	}
 	vTaskDelay(10);
-	canMsgTx(0,_CHECK_CURR_DATA);
-	if (pdFALSE == xQueueReceive(CanMsgQueue, &RxMsg, 50))
+	canMsgTx(module0,_CHECK_CURR_DATA);
+	if (pdFALSE == xQueueReceive(CanMsgQueue, &Cur0, 50))
 	{
 		return FALSE;
 	}
-	else
+
+	canMsgTx(module2, _CHECK_CURR_CMD);
+	xQueueReceive(CanMsgQueue, &RxMsg, 50);
+	if (RxMsg != _CHECK_CURR_CMD_BACK)
 	{
-		RcvCurr = (RxMsg & 0xffff);
-		if (ChargerTimeCount < 60)
-		{
-			return TRUE;
-		}
-		if (RxMsg < 0xf13100E0)//设定小于某值时，充电结束，充电开始时设定充电未结束
-		{
-			setChangerOver();
-		}
+		return FALSE;
+	}
+	vTaskDelay(10);
+	canMsgTx(module2, _CHECK_CURR_DATA);
+	if (pdFALSE == xQueueReceive(CanMsgQueue, &Cur2, 50))
+	{
+		return FALSE;
+	}
+	RcvCurr = (Cur0 & 0xffff) + (Cur2 & 0xffff);
+	if (ChargerTimeCount < 60)
+	{
 		return TRUE;
 	}
+	if (RcvCurr < _CLOSE_CUR)//设定小于某值时，充电结束，充电开始时设定充电未结束
+	{
+		setChangerOver();
+	}
+	return TRUE;
 }
 
 //************************************
@@ -503,11 +545,12 @@ extern void agvConnectResetCmd(void)
 	AgvConnectFlag = FALSE;
 }
 
+
 static void sendCmdToCharger(u8 moudle, u8 data1, u8 data2, u8 data3, u8 data4)
 {
 	switch (moudle)
 	{
-	case 1:
+	case 0:
 		canMsgTx(0, data1, data2, data3, data4);
 		break;
 	case 2:
@@ -523,94 +566,4 @@ static void sendCmdToCharger(u8 moudle, u8 data1, u8 data2, u8 data3, u8 data4)
 	}
 }
 
-static s8 controlStrtagy(void)
-{
-	u32 RxMsg = 0;
-	if (CLOSE == checkChangerStatusOpen())//充电板未打开，打开充电板
-	{
-		while (0 != setCharger());
-		while (0 != openCharger());
-		return 0x06;//正在打开充电桩
-	}
-	else if (!isCurGood())//充电板已经打开，查询参数
-	{
-		closeCharger();
-		//while (0 != closeCharger());
-		return 0x07;//电流异常关闭
-	}
-	else if (isOverCharge())
-	{
-		while (0 != closeCharger());//充电完成关闭
-		return 0x08;
-	}
-	else if ((ChargerTimeCount>600)&&(ChargerTimeCount%300==0))
-	{
-		if (MoudleOpenFlag.module0 == TRUE)
-		{
-			canMsgTx(0, _CLOSE_CMD);
-			xQueueReceive(CanMsgQueue, &RxMsg, 50);
-			if (RxMsg != _CLODE_CMD_BACK)
-			{
-				return -1;
-			}
-			vTaskDelay(10);
-			canMsgTx(0, _CLOSE_DATA);
-			xQueueReceive(CanMsgQueue, &RxMsg, 50);
-			if (RxMsg != _CLOSE_DATA_BACK)
-			{
-				return -2;
-			}
-			MoudleOpenFlag.module0 = FALSE;
-
-			canMsgTx(2, _OPEN_CMD);
-			xQueueReceive(CanMsgQueue, &RxMsg, 50);
-			if (RxMsg != _OPEN_CMD_BACK)
-			{
-				return -1;
-			}
-			vTaskDelay(10);
-			canMsgTx(2, _OPEN_DATA);
-			xQueueReceive(CanMsgQueue, &RxMsg, 50);
-			if (RxMsg != _OPEN_DATA_BACK)
-			{
-				return -2;
-			}
-			MoudleOpenFlag.module2 = TRUE;
-		}
-		else if(MoudleOpenFlag.module2 == TRUE)
-		{
-			canMsgTx(2, _CLOSE_CMD);
-			xQueueReceive(CanMsgQueue, &RxMsg, 50);
-			if (RxMsg != _CLODE_CMD_BACK)
-			{
-				return -1;
-			}
-			vTaskDelay(10);
-			canMsgTx(2, _CLOSE_DATA);
-			xQueueReceive(CanMsgQueue, &RxMsg, 50);
-			if (RxMsg != _CLOSE_DATA_BACK)
-			{
-				return -2;
-			}
-			MoudleOpenFlag.module2 = FALSE;
-
-			canMsgTx(0, _OPEN_CMD);
-			xQueueReceive(CanMsgQueue, &RxMsg, 50);
-			if (RxMsg != _OPEN_CMD_BACK)
-			{
-				return -1;
-			}
-			vTaskDelay(10);
-			canMsgTx(0, _OPEN_DATA);
-			xQueueReceive(CanMsgQueue, &RxMsg, 50);
-			if (RxMsg != _OPEN_DATA_BACK)
-			{
-				return -2;
-			}
-			MoudleOpenFlag.module0 = TRUE;
-		}
-	}
-
-	return 0x00;
-}
 

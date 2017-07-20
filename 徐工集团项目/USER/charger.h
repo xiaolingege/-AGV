@@ -62,10 +62,13 @@ typedef struct _CHARGER_MOUDLE_TYPE
 extern u8 chargerCTRLLoop(void);
 static bool isOnConnect(void);
 static bool isCloseDelay(void);
+static bool isModuleConnect(_CHANGER_MODULE moudle);
 bool isChargerNotGood(void);
+static s8 openMdoule(_CHANGER_MODULE module);
 static bool isChargeOver(void);
 
 static s8 openCharger(void);
+static s8 closeMoudle(_CHANGER_MODULE module);
 static s8 closeCharger(void);
 static s8 setCharger(void);
 static bool isBattryVolGood(void);

@@ -47,7 +47,7 @@ void ttlLcdMsgSed(TTLCOMMOND cmd, float data)
 		}
 		break;
 	case COOL:
-		if (data == TRUE)
+		if (data != 0)
 		{
 			strcpy(ptr, "DS32(638,408,' YES ");
 		}

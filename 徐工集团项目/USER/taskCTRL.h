@@ -13,7 +13,7 @@
 #define _SPI_LCD_STK 100
 #define _USART_IRDA_STK 100
 #define _CAN_CHARGE_STK 400
-#define _TTL_LCD_STK 50
+#define _TTL_LCD_STK 200
 
 TaskHandle_t SPILcdTaskHandle;
 TaskHandle_t UsartIrdaTaskHandle;
