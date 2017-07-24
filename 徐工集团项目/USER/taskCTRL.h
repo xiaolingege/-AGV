@@ -10,10 +10,10 @@
 #define _CAN_CHARGE_PRIO 1
 #define _TTL_LCD_PRIO 2
 
-#define _SPI_LCD_STK 100
-#define _USART_IRDA_STK 100
-#define _CAN_CHARGE_STK 400
-#define _TTL_LCD_STK 200
+#define _SPI_LCD_STK 400
+#define _USART_IRDA_STK 400
+#define _CAN_CHARGE_STK 800
+#define _TTL_LCD_STK 400
 
 TaskHandle_t SPILcdTaskHandle;
 TaskHandle_t UsartIrdaTaskHandle;

@@ -70,6 +70,10 @@ extern u8 chargerCTRLLoop(void)
 	}
 	else if (!isBattryVolGood())
 	{
+		if (checkChangerStatusOpen() == OPEN)
+		{
+			while (0 != closeCharger());
+		}
 		return 0x05;//电池电压异常
 	}
 	else
@@ -102,7 +106,7 @@ static s8 controlStrtagy(void)
 		while (0 != closeCharger());//充电完成关闭
 		return 0x08;
 	}
-	else if ((ChargerTimeCount >= 600) && (ChargerTimeCount % 600 == 0))
+	else if ((ChargerTimeCount >= 1800) && (ChargerTimeCount % 600 == 0))
 	{
 		if (MoudleOpenFlag.module0 == TRUE)
 		{
@@ -118,6 +122,7 @@ static s8 controlStrtagy(void)
 			openMdoule(module0);
 			MoudleOpenFlag.module0 = TRUE;
 		}
+        vTaskDelay(30000);
 	}
 	return 0x00;
 }
@@ -394,6 +399,7 @@ static bool isBattryVolGood(void)
 	{
 		return FALSE;
 	}
+	RcvVola = RxMsg & 0xffff;
 	return TRUE;
 }
 
@@ -526,6 +532,17 @@ extern u16 getCurr(void)
 {
 	return RcvCurr;
 }
+extern u16 getVola(void)
+{
+    if(RcvVola > 0x78)
+    {
+        return (RcvVola-0x78);
+    }
+    else
+    {
+        return 0;
+    }
+}
 
 extern void agvOpenSetCmd(void)
 {
@@ -534,6 +551,10 @@ extern void agvOpenSetCmd(void)
 extern void agvOpenResetCmd(void)
 {
 	AgvSetChargerOpen = FALSE;
+}
+extern bool isAgvOpenCmd(void)
+{
+	return AgvSetChargerOpen;
 }
 
 extern void agvConnectSetCmd(void)

@@ -150,7 +150,7 @@ static void agvLeaveBack(u8 status)
 {
 	u8 agvLeaveBackBuffer[6] = { 0xAA, 0x03, 0x00, 0xFF };
 
-    if (status == 0x09)
+    if (status == 0x09 || status == 0x01)
     {
         agvLeaveBackBuffer[3] = 0x01;
         agvLeaveBackBuffer[4] = (CRC16(agvLeaveBackBuffer, 4) & 0xff);

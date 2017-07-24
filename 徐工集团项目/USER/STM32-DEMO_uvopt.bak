@@ -178,24 +178,8 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>222</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134228062</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>E:\脨矛鹿陇录炉脥脜AGV\脨矛鹿陇录炉脥脜脧卯脛驴\USER\charger.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\STM32_DEMO\charger.c\222</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
           <LineNumber>325</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
+          <EnabledFlag>0</EnabledFlag>
           <Address>134229476</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
@@ -208,10 +192,10 @@
           <Expression>\\STM32_DEMO\charger.c\325</Expression>
         </Bp>
         <Bp>
-          <Number>3</Number>
+          <Number>2</Number>
           <Type>0</Type>
           <LineNumber>339</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
+          <EnabledFlag>0</EnabledFlag>
           <Address>134229572</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
@@ -224,42 +208,10 @@
           <Expression>\\STM32_DEMO\charger.c\339</Expression>
         </Bp>
         <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>352</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134229652</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>E:\脨矛鹿陇录炉脥脜AGV\脨矛鹿陇录炉脥脜脧卯脛驴\USER\charger.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\STM32_DEMO\charger.c\352</Expression>
-        </Bp>
-        <Bp>
-          <Number>5</Number>
-          <Type>0</Type>
-          <LineNumber>359</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134229698</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>E:\脨矛鹿陇录炉脥脜AGV\脨矛鹿陇录炉脥脜脧卯脛驴\USER\charger.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\STM32_DEMO\charger.c\359</Expression>
-        </Bp>
-        <Bp>
-          <Number>6</Number>
+          <Number>3</Number>
           <Type>0</Type>
           <LineNumber>131</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
+          <EnabledFlag>0</EnabledFlag>
           <Address>134222316</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
@@ -272,10 +224,10 @@
           <Expression>\\STM32_DEMO\usart.c\131</Expression>
         </Bp>
         <Bp>
-          <Number>7</Number>
+          <Number>4</Number>
           <Type>0</Type>
           <LineNumber>155</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
+          <EnabledFlag>0</EnabledFlag>
           <Address>134225684</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
@@ -288,10 +240,10 @@
           <Expression>\\STM32_DEMO\charger.c\155</Expression>
         </Bp>
         <Bp>
-          <Number>8</Number>
+          <Number>5</Number>
           <Type>0</Type>
           <LineNumber>215</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
+          <EnabledFlag>0</EnabledFlag>
           <Address>134230558</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
@@ -302,6 +254,38 @@
           <Filename>E:\脨矛鹿陇录炉脥脜AGV\脨矛鹿陇录炉脥脜脧卯脛驴\USER\main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\STM32_DEMO\main.c\215</Expression>
+        </Bp>
+        <Bp>
+          <Number>6</Number>
+          <Type>0</Type>
+          <LineNumber>446</LineNumber>
+          <EnabledFlag>0</EnabledFlag>
+          <Address>134226964</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>E:\脨矛鹿陇录炉脥脜AGV\脨矛鹿陇录炉脥脜脧卯脛驴\USER\charger.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\STM32_DEMO\charger.c\446</Expression>
+        </Bp>
+        <Bp>
+          <Number>7</Number>
+          <Type>0</Type>
+          <LineNumber>158</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134225338</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>E:\脨矛鹿陇录炉脥脜AGV\脨矛鹿陇录炉脥脜脧卯脛驴\USER\main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\STM32_DEMO\main.c\158</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -416,7 +400,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>122</TopLine>
+      <TopLine>125</TopLine>
       <CurrentLine>133</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\CMSIS\startup\startup_stm32f10x_md.s</PathWithFileName>
@@ -438,10 +422,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>43</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>184</TopLine>
-      <CurrentLine>215</CurrentLine>
+      <TopLine>187</TopLine>
+      <CurrentLine>197</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -456,8 +440,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>60</TopLine>
+      <CurrentLine>61</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\stm32f10x_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32f10x_it.c</FilenameWithoutPath>
@@ -520,7 +504,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>29</TopLine>
+      <TopLine>27</TopLine>
       <CurrentLine>49</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\key.c</PathWithFileName>
@@ -552,7 +536,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>86</TopLine>
+      <TopLine>1</TopLine>
       <CurrentLine>92</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\LCD.c</PathWithFileName>
@@ -568,7 +552,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>124</TopLine>
+      <TopLine>127</TopLine>
       <CurrentLine>131</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\usart.c</PathWithFileName>
@@ -598,10 +582,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>19</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>46</TopLine>
-      <CurrentLine>10</CurrentLine>
+      <TopLine>6</TopLine>
+      <CurrentLine>38</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\ttllcd.c</PathWithFileName>
       <FilenameWithoutPath>ttllcd.c</FilenameWithoutPath>
@@ -614,10 +598,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1</ColumnNumber>
+      <ColumnNumber>17</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>430</TopLine>
-      <CurrentLine>408</CurrentLine>
+      <TopLine>528</TopLine>
+      <CurrentLine>543</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\charger.c</PathWithFileName>
       <FilenameWithoutPath>charger.c</FilenameWithoutPath>
@@ -926,10 +910,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>38</ColumnNumber>
+      <ColumnNumber>22</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>3371</TopLine>
-      <CurrentLine>3375</CurrentLine>
+      <TopLine>3374</TopLine>
+      <CurrentLine>3376</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\FreeRTOS\src\tasks.c</PathWithFileName>
       <FilenameWithoutPath>tasks.c</FilenameWithoutPath>

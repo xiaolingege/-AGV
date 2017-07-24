@@ -18,7 +18,7 @@ xQueueHandle CanMsgQueue;
 u8 ChargerStatusBack;
 void initShowStrings(void);
 void lcdShowElectricity(float e);
-
+static float isChargerVolPush(void);
 //************************************
 // FunctionName:  main
 // Returns:   int
@@ -40,7 +40,7 @@ int main(void)
     TIM3_Configuration();
 
 	CanMsgQueue = xQueueCreate(17, sizeof(u32));
-#if !_PROJECT_AGV
+#if _PROJECT_AGV
 	xTaskCreate((TaskFunction_t)spiLcdTask, \
 		(const char*)"UsartLcdTask", \
 		(u16)_SPI_LCD_STK, \
@@ -84,11 +84,7 @@ void spiLcdTask(void * pvParameter)
 	u8 showbyte = 0;
 	float i = 10.2;
 	vTaskDelay(200);
-	// 	_TTL_LCD_CLR;
 	lcdInit();
-	// 	vTaskDelay(500);
-	// 	_TTL_LCD_SHOW;
-	// 	vTaskDelay(2000);
 	initShowStrings();
 	while (1)
 	{
@@ -97,12 +93,6 @@ void spiLcdTask(void * pvParameter)
         //lcdShowNumber(X2_Y5, i);
 		lcdShowNumber(X3_Y4, ChargerTimeCount/60.0f);
 		lcdShowElectricity(i);
-// 		ttlLcdMsgSed(CHARGEVOL, 10);
-// 		ttlLcdMsgSed(CHARGECUR, 0);
-// 		ttlLcdMsgSed(CHARGETIME, 0);
-// 		ttlLcdMsgSed(MACHINESTATUS, 0);
-// 		ttlLcdMsgSed(BATTERY, TRUE);
-// 		ttlLcdMsgSed(COOL, FALSE);
 	}
 }
 
@@ -204,16 +194,26 @@ void ttlLcdTask(void *pvParameter)
 	vTaskDelay(2000);
 	while (1)
 	{
-        
-        i+=0.1;
- 		ttlLcdMsgSed(CHARGEVOL, i);
- 		ttlLcdMsgSed(CHARGECUR, getCurr()/210.0f);
+ 		ttlLcdMsgSed(CHARGEVOL, (float)getVola()/128.0f);
+ 		ttlLcdMsgSed(CHARGECUR, (float)getCurr()/210.0f);
 		ttlLcdMsgSed(CHARGETIME,  ChargerTimeCount/60.0f);
-		ttlLcdMsgSed(MACHINESTATUS, 0);
-		ttlLcdMsgSed(BATTERY, TRUE);
+		ttlLcdMsgSed(MACHINESTATUS, ChargerStatusBack);
+		ttlLcdMsgSed(BATTERY, isAgvOpenCmd());
 		ttlLcdMsgSed(COOL, ChargerCloseCount);
         vTaskDelay(100);
 	}
+}
+
+static float isChargerVolPush(void)
+{
+    if(ChargerStatusBack == 9)
+    {
+        return 27.2f;
+    }
+    else
+    {
+        return 0.0f;
+    }
 }
 
 
