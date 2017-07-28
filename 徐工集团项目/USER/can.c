@@ -2,10 +2,12 @@
 #include "led.h"
 #include "stdio.h"
 
-/* 在中断处理函数中返回 */
-__IO uint32_t ret = 0;
-
-/*CAN GPIO 和时钟配置 */
+//************************************
+// FunctionName:  canGpioConfig
+// Returns:   void
+// Qualifier:can总线收发引脚定义
+// Parameter: void
+//************************************
 void canGpioConfig(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -20,7 +22,12 @@ void canGpioConfig(void)
 	GPIO_PinRemapConfig(GPIO_Remap1_CAN1, ENABLE);
 }
 
-/*	CAN初始化 */
+//************************************
+// FunctionName:  canInit
+// Returns:   void
+// Qualifier:CAN总线参数定义
+// Parameter: void
+//************************************
 void canInit(void)
 {
 	CAN_InitTypeDef        CAN_InitStructure;
@@ -53,7 +60,16 @@ void canInit(void)
 	CAN_FilterInit(&CAN_FilterInitStructure);//	按上面的参数初始化过滤器
 	CAN_ITConfig(CAN1, CAN_IT_FMP0, ENABLE); //使能FIFO0消息挂号中断
 }
-/* 发送两个字节的数据*/
+//************************************
+// FunctionName:  canMsgTx
+// Returns:   void
+// Qualifier:向模块中发送和4字节的数据
+// Parameter: u8 module
+// Parameter: u8 Data1
+// Parameter: u8 Data2
+// Parameter: u8 Data3
+// Parameter: u8 Data4
+//************************************
 void canMsgTx(u8 module, u8 Data1, u8 Data2, u8 Data3, u8 Data4)
 {
 	CanTxMsg TxMessage;

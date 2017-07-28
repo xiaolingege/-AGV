@@ -37,3 +37,4 @@
 ..\Output\main.o: TIM.h
 ..\Output\main.o: ..\FWlib\inc\stm32f10x_tim.h
 ..\Output\main.o: irda.h
+..\Output\main.o: msgagv.h

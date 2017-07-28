@@ -87,6 +87,12 @@ extern u8 chargerCTRLLoop(void)
 	return 0x09; //正常充电中
 }
 
+//************************************
+// FunctionName:  controlStrtagy
+// Returns:   s8
+// Qualifier:控制策略，前半小时双充电板充电，半小时后按照半小时，轮流交替两个充电板充电
+// Parameter: void
+//************************************
 static s8 controlStrtagy(void)
 {
 	if (CLOSE == checkChangerStatusOpen())//充电板未打开，打开充电板
@@ -162,6 +168,12 @@ static bool isCloseDelay(void)
 	}
 }
 
+//************************************
+// FunctionName:  isModuleConnect
+// Returns:   bool
+// Qualifier:查询两个模块的连接情况，判断有几个充电板可用
+// Parameter: _CHANGER_MODULE moudle
+//************************************
 static bool isModuleConnect(_CHANGER_MODULE moudle)
 {
 	u8 i = 0;
@@ -215,6 +227,12 @@ bool isChargerNotGood(void)
 	return FALSE;
 }
 
+//************************************
+// FunctionName:  openMdoule
+// Returns:   s8
+// Qualifier:根据参数打开对应的充电板模块
+// Parameter: _CHANGER_MODULE module
+//************************************
 static s8 openMdoule(_CHANGER_MODULE module)
 {
 	u32 RxMsg = 0;
@@ -259,6 +277,12 @@ static s8 openCharger(void)
 	return 0;
 }
 
+//************************************
+// FunctionName:  closeMoudle
+// Returns:   s8
+// Qualifier:根据参数关闭对应的模块
+// Parameter: _CHANGER_MODULE module
+//************************************
 static s8 closeMoudle(_CHANGER_MODULE module)
 {
 	u32 RxMsg = 0;
@@ -544,29 +568,69 @@ extern u16 getVola(void)
     }
 }
 
+//************************************
+// FunctionName:  agvOpenSetCmd
+// Returns:   extern void
+// Qualifier:通过AGV的信息打开充电桩
+// Parameter: void
+//************************************
 extern void agvOpenSetCmd(void)
 {
 	AgvSetChargerOpen = TRUE;
 }
+//************************************
+// FunctionName:  agvOpenResetCmd
+// Returns:   extern void
+// Qualifier:根据AGV的信息关闭充电桩
+// Parameter: void
+//************************************
 extern void agvOpenResetCmd(void)
 {
 	AgvSetChargerOpen = FALSE;
 }
+//************************************
+// FunctionName:  isAgvOpenCmd
+// Returns:   extern bool
+// Qualifier:判断当前AGV是否打开充电桩
+// Parameter: void
+//************************************
 extern bool isAgvOpenCmd(void)
 {
 	return AgvSetChargerOpen;
 }
 
+//************************************
+// FunctionName:  agvConnectSetCmd
+// Returns:   extern void
+// Qualifier:AGV开始对接充电板
+// Parameter: void
+//************************************
 extern void agvConnectSetCmd(void)
 {
 	AgvConnectFlag = TRUE;
 }
+//************************************
+// FunctionName:  agvConnectResetCmd
+// Returns:   extern void
+// Qualifier:AGV离开对接
+// Parameter: void
+//************************************
 extern void agvConnectResetCmd(void)
 {
 	AgvConnectFlag = FALSE;
 }
 
 
+//************************************
+// FunctionName:  sendCmdToCharger
+// Returns:   void
+// Qualifier:根据参数向对应的充电板发送数据
+// Parameter: u8 moudle
+// Parameter: u8 data1
+// Parameter: u8 data2
+// Parameter: u8 data3
+// Parameter: u8 data4
+//************************************
 static void sendCmdToCharger(u8 moudle, u8 data1, u8 data2, u8 data3, u8 data4)
 {
 	switch (moudle)

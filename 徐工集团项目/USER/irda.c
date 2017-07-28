@@ -1,5 +1,5 @@
 #include "irda.h"
-
+#define _PROJECT_AGV_IRDA 1
 extern volatile u32 ChargerCloseCount;
 volatile u8 IrdaRxBufferCount = 0;
 u8 IrdaRxBuffer[_IRDA_RX_SIZE] = { 0 };
@@ -59,7 +59,8 @@ bool isCheckEOF(void)
         	return FALSE;
     }
 }
-
+//-----------------------------------------------充电桩打开，AGV关闭
+#if !_PROJECT_AGV_IRDA
 void USART3_IRQHandler(void)
 {//  unsigned int i;
 	if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
@@ -73,6 +74,7 @@ void USART3_IRQHandler(void)
 		USART_ClearITPendingBit(USART3, USART_IT_RXNE);
 	}
 }
+#endif
 
 void msgFeedBackToIrda(u8 status, u8 cmd)
 {
@@ -150,7 +152,7 @@ static void agvLeaveBack(u8 status)
 {
 	u8 agvLeaveBackBuffer[6] = { 0xAA, 0x03, 0x00, 0xFF };
 
-    if (status == 0x09 || status == 0x01)
+    if (status == 0x09 || status == 0x01 || status == 0x0a)
     {
         agvLeaveBackBuffer[3] = 0x01;
         agvLeaveBackBuffer[4] = (CRC16(agvLeaveBackBuffer, 4) & 0xff);
@@ -175,6 +177,5 @@ static void chargeOverCheckBack(u8 status)
 	chargeOverBackBuffer[5] = (CRC16(chargeOverBackBuffer, 4) >> 8);
 	usart485Send(chargeOverBackBuffer, 6);
 }
-
 
 

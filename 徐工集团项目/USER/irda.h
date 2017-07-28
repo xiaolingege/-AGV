@@ -18,13 +18,15 @@ typedef enum _IRDA_RX_TYPE
 	QUERY = 4
 }IRDA_RX_TYPE;
 IRDA_RX_TYPE rcvMsgFromIrda(void);
-bool isCheckHead(void);
-bool isCheckEOF(void);
+static bool isCheckHead(void);
+static bool isCheckEOF(void);
 void msgFeedBackToIrda(u8 status, u8 cmd);
 static void chargerStatusBack(u8 status);
 static void chargeRequestBack(u8 status);
 static void agvLeaveBack(u8 status);
 static void chargeOverCheckBack(u8 status);
 #endif // !_IRDA_H
+
+
 
 
